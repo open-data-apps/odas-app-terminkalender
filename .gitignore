@@ -1,0 +1,44 @@
+# These are some examples of commonly ignored file patterns.
+# Customize this list as applicable to your project.
+# Learn more about .gitignore:
+#     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
+# === Node.js-specific ===
+node_modules/
+dist/  # Build artifacts
+
+# === Java-specific ===
+*.class
+*.jar
+target/
+
+# === Python-specific ===
+*.py[cod]  # Compiled Python bytecode
+
+# === Log files ===
+*.log
+
+# === JetBrains IDE ===
+.idea/
+
+# === Unit test reports ===
+TEST*.xml
+
+# === OS-specific ===
+# MacOS
+.DS_Store
+# Windows
+Thumbs.db
+
+# === Application files ===
+*.app
+*.exe
+*.war
+
+# === Media files ===
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv

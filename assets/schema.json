@@ -1,0 +1,72 @@
+{
+  "$schema": "https://frictionlessdata.io/schemas/table-schema.json",
+  "fields": [
+    {
+      "name": "uid",
+      "type": "string",
+      "title": "Eindeutige ID",
+      "description": "Eindeutige Kennung des Termins aus der ICS-Datei",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "start",
+      "type": "datetime",
+      "format": "%Y-%m-%dT%H:%M:%SZ",
+      "title": "Startzeit",
+      "description": "Beginn des Termins im ISO 8601 Format",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "end",
+      "type": "datetime",
+      "format": "%Y-%m-%dT%H:%M:%SZ",
+      "title": "Endzeit",
+      "description": "Ende des Termins im ISO 8601 Format",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "title": "Titel",
+      "description": "Titel oder Zusammenfassung des Termins",
+      "constraints": {
+        "required": true
+      }
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "title": "Beschreibung",
+      "description": "Detaillierte Beschreibung des Termins",
+      "constraints": {
+        "required": false
+      }
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "title": "Ort",
+      "description": "Veranstaltungsort des Termins",
+      "constraints": {
+        "required": false
+      }
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "title": "Kategorie",
+      "description": "Optionale Kategorisierung des Termins",
+      "constraints": {
+        "required": false
+      }
+    }
+  ],
+  "primaryKey": ["uid"],
+  "missingValues": ["", "null"]
+}

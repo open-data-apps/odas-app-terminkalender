@@ -1,0 +1,37 @@
+/* Elemente ausblenden */
+
+.ib-hourglass {
+  display: none !important;
+}
+
+.ib-hamburger-side {
+  display: none !important;
+}
+
+.ib-expand {
+  display: none !important;
+}
+
+.ib-bar-graph {
+  display: none !important;
+}
+
+.ib-plus {
+  display: none !important;
+}
+
+.ib-arrow-right-full-line {
+  display: none !important;
+}
+
+.ib-hamburger {
+  display: none !important;
+}
+
+.ib-refresh {
+  display: none !important;
+}
+
+.mb-3 {
+  width: 100%;
+}
