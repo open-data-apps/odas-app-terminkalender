@@ -1,124 +1,32 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Hintergrund-Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7eb8f7"/>
+      <stop offset="100%" stop-color="#3d3fa5"/>
+    </linearGradient>
+    <!-- Schatten-Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.30"/>
+    </filter>
+  </defs>
 
-<svg
-   width="512"
-   height="512"
-   viewBox="0 0 512 512"
-   version="1.1"
-   id="svg1"
-   inkscape:version="1.4.1-rc (832c77b156, 2025-02-28)"
-   sodipodi:docname="Terminkalender_Logo.svg"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview1"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="px"
-     inkscape:zoom="1.5683594"
-     inkscape:cx="255.6812"
-     inkscape:cy="319.7609"
-     inkscape:window-width="1920"
-     inkscape:window-height="1011"
-     inkscape:window-x="0"
-     inkscape:window-y="32"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
-  <defs
-     id="defs1" />
-  <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1">
-    <!-- Hintergrund -->
-    <!-- Formularfeld -->
-    <!-- Simulierte Textzeilen im Formular -->
-    <!-- H\u00e4kchen -->
-    <!-- Hintergrund -->
-    <!-- Foto-Rahmen (wei\u00df) mit gefalteter Ecke -->
-    <!-- Hintergrund -->
-    <rect
-       width="512"
-       height="512"
-       fill="#3e8ede"
-       rx="50"
-       ry="50"
-       id="rect1"
-       x="0.95392281"
-       y="0.63262767" />
-    <!-- Kalender Icon -->
-    <g
-       id="g6"
-       transform="translate(0.95392279,0.63262765)">
-      <!-- Wei\u00dfes Hauptrechteck des Kalenders -->
-      <rect
-         x="100"
-         y="100"
-         width="312"
-         height="312"
-         fill="#ffffff"
-         rx="20"
-         ry="20"
-         id="rect2" />
-      <!-- Header des Kalenders -->
-      <rect
-         x="100"
-         y="100"
-         width="312"
-         height="80"
-         fill="#f05a28"
-         rx="20"
-         ry="20"
-         id="rect3" />
-      <!-- Horizontale Gitterlinien (3 Zeilen) -->
-      <line
-         x1="100"
-         y1="257"
-         x2="412"
-         y2="257"
-         stroke="#cccccc"
-         stroke-width="4"
-         id="line3" />
-      <line
-         x1="100"
-         y1="335"
-         x2="412"
-         y2="335"
-         stroke="#cccccc"
-         stroke-width="4"
-         id="line4" />
-      <!-- Vertikale Gitterlinien (3 Spalten) -->
-      <line
-         x1="204"
-         y1="100"
-         x2="204"
-         y2="412"
-         stroke="#cccccc"
-         stroke-width="4"
-         id="line5" />
-      <line
-         x1="308"
-         y1="100"
-         x2="308"
-         y2="412"
-         stroke="#cccccc"
-         stroke-width="4"
-         id="line6" />
-      <!-- Highlight: Aktueller Tag -->
-      <circle
-         cx="256"
-         cy="296"
-         r="20"
-         fill="#f05a28"
-         id="circle6" />
-    </g>
+  <!-- Hintergrund -->
+  <rect width="512" height="512" rx="108" ry="108" fill="url(#bgGrad)"/>
+
+  <!-- Optional: Glanz-Overlay oben-links -->
+  <ellipse cx="160" cy="140" rx="180" ry="160" fill="white" fill-opacity="0.07"/>
+
+  <!-- Motiv: Terminkalender -->
+  <g filter="url(#shadow)">
+    <!-- Kalenderblatt -->
+    <rect x="126" y="140" width="260" height="260" rx="20" fill="none" stroke="#ffffff" stroke-width="24"/>
+    <path d="M 126 210 L 386 210" stroke="#ffffff" stroke-width="24"/>
+    <!-- Ringe oben -->
+    <rect x="170" y="110" width="20" height="40" rx="10" fill="#ffffff"/>
+    <rect x="246" y="110" width="20" height="40" rx="10" fill="#ffffff"/>
+    <rect x="322" y="110" width="20" height="40" rx="10" fill="#ffffff"/>
+    <!-- Checkmark im Kalender -->
+    <path d="M 200 300 L 240 340 L 320 250" stroke="#ffffff" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </g>
 </svg>
