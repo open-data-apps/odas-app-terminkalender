@@ -50,3 +50,18 @@
 .tk-weitere-infos-content a {
   overflow-wrap: anywhere;
 }
+
+.tk-methodik {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.5rem;
+  background: var(--bs-body-bg);
+  padding: 1rem;
+}
+
+.tk-methodik-content :last-child {
+  margin-bottom: 0;
+}
+
+.tk-methodik-content a {
+  overflow-wrap: anywhere;
+}

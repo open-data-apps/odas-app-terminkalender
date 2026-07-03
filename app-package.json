@@ -9,28 +9,19 @@
   "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert alle Termine ansprechend und aktuell.",
   "beschreibung": [
     "_multiline_",
-    "## Über diese App",
-    "Dieser Kalender zeigt öffentliche Termine und Veranstaltungen übersichtlich an. Von Bürgerbeteiligung bis Wochenmarkt – alle städtischen Termine auf einen Blick.",
-    "",
-    "## Inhalte",
-    "- Interaktiver Kalender mit Monats-, Wochen- und Tagesansicht",
-    "- Dropdown-Auswahl zwischen mehreren Kalendern (ICS-Ressourcen)",
-    "- Farbcodierte Terminkategorien für schnelle Orientierung",
-    "- Export-Funktion für einzelne Termine",
-    "",
-    "## Nutzung",
-    "Wählen Sie im Dropdown den gewünschten Kalender aus. Navigieren Sie durch die Monate oder wechseln Sie in die Wochen- bzw. Tagesansicht. Ein Klick auf einen Termin zeigt die Detailinformationen an.",
-    "",
-    "## Für wen ist diese App?",
-    "Dieser Kalender zeigt öffentliche Termine und Veranstaltungen. Er richtet sich an alle Bürger:innen, die wissen möchten, was in ihrer Stadt los ist.",
-    "",
-    "## Datenquelle",
-    "- **Open Data Portal:** <a href=\"{{odp.url}}\" target=\"_blank\">{{odp.name}}</a>",
-    "- **Datensatz:** <a href=\"{{appinstanz.urlDaten}}\" target=\"_blank\">Terminkalender-Datensatz im Open Data Portal</a>",
-    "- **Ressourcen:** <a href=\"{{appinstanz.apiurl}}\" target=\"_blank\">package_show API</a>",
-    "",
-    "## Open Data App Store",
-    "Der Open Data App Store wird betrieben von <a href=\"{{odas.betreiber.url}}\">{{odas.betreiber.name}}</a>."
+    "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
+    "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
+    "<h3>Inhalte</h3>",
+    "<p>Die App verarbeitet Terminangaben aus einer konfigurierten Quelle und stellt Datum, Titel, Ort, Beschreibung und weitere verfügbare Felder dar.</p>",
+    "<h3>Nutzung</h3>",
+    "<p>Durchsuchen oder filtern Sie Termine und öffnen Sie Details zu einzelnen Einträgen. Die App zeigt die Angaben der Datenquelle; kurzfristige Änderungen sollten bei wichtigen Terminen zusätzlich über die zuständige Stelle geprüft werden.</p>",
+    "<h3>Für wen ist diese App?</h3>",
+    "<p>Die App richtet sich an Bürger:innen, Verwaltung, Veranstalter und Öffentlichkeitsarbeit, die Termine verständlich bereitstellen möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.</p>",
+    "<h3>Datenquelle</h3>",
+    "<p>Die Termine werden aus dem konfigurierten Open-Data-Datensatz geladen.</p>",
+    "<ul><li><strong>Open Data Portal:</strong> <a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><strong>Ressource/API-Endpunkt:</strong> <a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li></ul>",
+    "<h3>Open Data App Store</h3>",
+    "<p>Diese App ist für den Open Data App Store vorbereitet und kann mit Termin- und Veranstaltungskalendern anderer Kommunen betrieben werden.</p>"
   ],
   "tags-funktion": [
     "Verwaltungsprozess"
@@ -114,17 +105,19 @@
       },
       "default": [
         "_multiline_",
-        "Die Terminkalender-App zeigt die Termine für den ausgewählten Kalender an.",
-        "Die Daten werden tagesaktuell gehalten. Bei Änderungen versuchen wir, den Datenbestend immer sofort zu aktualisieren.",
-        "## App-Anbieter",
-        "Die App wird bereit gestellt von <a href=\"{{odp.anbieter.url}}\">{{odp.anbieter.name}}</a>",
-        "## Datenquelle",
-        "Die Daten kommen aus  unserem Open Data Portal <a href=\"{{odp.url}}\">{{odp.name}}</a>",
-        "Die Datenquelle ist in unserem Open Data Portal <a href=\"{{appinstanz.apiurl}}\">{{appinstanz.apiurl}}</a>.",
-        "## Über diese App",
-        "Die App wurde entwickelt von <a href=\"{{app.developer.url}}\">{{app.developer.name}}</a>. App-Version: {{app.version}}.",
-        "## Open Data App Store",
-        "Der Open Data App Store betrieben von <a href=\"{{odas.betreiber.url}}\">{{odas.betreiber.name}}</a>"
+        "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
+        "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
+        "<h3>Inhalte</h3>",
+        "<p>Die App verarbeitet Terminangaben aus einer konfigurierten Quelle und stellt Datum, Titel, Ort, Beschreibung und weitere verfügbare Felder dar.</p>",
+        "<h3>Nutzung</h3>",
+        "<p>Durchsuchen oder filtern Sie Termine und öffnen Sie Details zu einzelnen Einträgen. Die App zeigt die Angaben der Datenquelle; kurzfristige Änderungen sollten bei wichtigen Terminen zusätzlich über die zuständige Stelle geprüft werden.</p>",
+        "<h3>Für wen ist diese App?</h3>",
+        "<p>Die App richtet sich an Bürger:innen, Verwaltung, Veranstalter und Öffentlichkeitsarbeit, die Termine verständlich bereitstellen möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.</p>",
+        "<h3>Datenquelle</h3>",
+        "<p>Die Termine werden aus dem konfigurierten Open-Data-Datensatz geladen.</p>",
+        "<ul><li><strong>Open Data Portal:</strong> <a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><strong>Ressource/API-Endpunkt:</strong> <a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li></ul>",
+        "<h3>Open Data App Store</h3>",
+        "<p>Diese App ist für den Open Data App Store vorbereitet und kann mit Termin- und Veranstaltungskalendern anderer Kommunen betrieben werden.</p>"
       ],
       "erforderlich": "ja"
     },
@@ -217,15 +210,29 @@
     "datenStand": {
       "label": "Datenstand",
       "hilfe": "Freitext-Datum, z.B. 'Stand: Januar 2025'. Leer = ausgeblendet.",
-      "format": { "typ": "string", "laenge": 60 },
-      "default": "",
+      "format": {
+        "typ": "string",
+        "laenge": 60
+      },
+      "default": "Stand: abhängig vom konfigurierten Terminkalender",
       "erforderlich": "nein"
     },
     "weiterfuehrendeLinks": {
       "label": "Weiterführende Links",
       "hilfe": "Verwandte Datensätze / Hintergrundquellen (Markdown/HTML). Leer = ausgeblendet.",
-      "format": { "typ": "markdown" },
-      "default": "",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",
+      "erforderlich": "nein"
+    },
+    "datenquelleHinweis": {
+      "label": "Methodik / Datenquelle-Hinweis",
+      "hilfe": "Herkunft, Erhebungsmethode und Limitierungen (HTML/Markdown). Leer = ausgeblendet.",
+      "format": {
+        "typ": "markdown"
+      },
+      "default": "<p>Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.</p>",
       "erforderlich": "nein"
     }
   },

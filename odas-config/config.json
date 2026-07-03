@@ -5,7 +5,21 @@
   "icon": "logo_ondics.png",
   "brandingCSS": "",
   "brandingCSSFile": "",
-  "beschreibung": "",
+  "beschreibung": [
+    "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
+    "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
+    "<h3>Inhalte</h3>",
+    "<p>Die App verarbeitet Terminangaben aus einer konfigurierten Quelle und stellt Datum, Titel, Ort, Beschreibung und weitere verfügbare Felder dar.</p>",
+    "<h3>Nutzung</h3>",
+    "<p>Durchsuchen oder filtern Sie Termine und öffnen Sie Details zu einzelnen Einträgen. Die App zeigt die Angaben der Datenquelle; kurzfristige Änderungen sollten bei wichtigen Terminen zusätzlich über die zuständige Stelle geprüft werden.</p>",
+    "<h3>Für wen ist diese App?</h3>",
+    "<p>Die App richtet sich an Bürger:innen, Verwaltung, Veranstalter und Öffentlichkeitsarbeit, die Termine verständlich bereitstellen möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.</p>",
+    "<h3>Datenquelle</h3>",
+    "<p>Die Termine werden aus dem konfigurierten Open-Data-Datensatz geladen.</p>",
+    "<ul><li><strong>Open Data Portal:</strong> <a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><strong>Ressource/API-Endpunkt:</strong> <a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li></ul>",
+    "<h3>Open Data App Store</h3>",
+    "<p>Diese App ist für den Open Data App Store vorbereitet und kann mit Termin- und Veranstaltungskalendern anderer Kommunen betrieben werden.</p>"
+  ],
   "kontakt": "Tel.: <a href='tel:+49711310093100'>0711-31009-3100</a><br>Fax: <a href='tel:+49711310093108'>0711-31009-3108</a><br>E-Mail: <a href='mailto:info@ondics.de'>info@ondics.de</a>",
   "impressum": "Ondics GmbH<br>Wolfgang Clauss<br>Blumenstrasse 19<br><a href='https://www.ondics.de/' target='_blank'>https://www.ondics.de/</a>",
   "datenschutz": "",
@@ -14,6 +28,7 @@
   "fusszeile": "(C) Copyright 2024 | Inhalt: Stadt Esslingen | App: Mueller GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
   "sprache": "de",
-  "datenStand": "",
-  "weiterfuehrendeLinks": ""
+  "datenStand": "Stand: abhängig vom konfigurierten Terminkalender",
+  "weiterfuehrendeLinks": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",
+  "datenquelleHinweis": "<p>Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.</p>"
 }
