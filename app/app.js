@@ -7,6 +7,35 @@
  */
 let calendarData = {};
 
+function escapeHtml(str) {
+  const s = String(str ?? "");
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function renderWeitereInfos(configdata) {
+  const links = (configdata.weiterfuehrendeLinks || "").trim();
+  if (!links) return "";
+  return (
+    '<section class="tk-weitere-infos mt-4">' +
+    '<h2 class="h5 mb-3">Weitere Informationen</h2>' +
+    '<div class="tk-weitere-infos-content">' +
+    links +
+    "</div></section>"
+  );
+}
+
+function extractDatenStand(apiResponse) {
+  const raw = apiResponse?.result?.metadata_modified || null;
+  if (!raw) return null;
+  const d = new Date(raw);
+  return isNaN(d.getTime()) ? null : d.toLocaleDateString("de-DE");
+}
+
 function app(configData, enclosingHtmlDivElement) {
   enclosingHtmlDivElement.innerHTML = `<div class="row">
       <div class="col-12" id="calendarOptions">
@@ -45,6 +74,17 @@ function loadAvailableCalendars(configData) {
         return;
       }
       if (data.success && data.result.resources) {
+        const stand = extractDatenStand(data);
+        if (stand) {
+          const mainContent = document.getElementById("main-content");
+          if (mainContent) {
+            const frischeEl = document.createElement("div");
+            frischeEl.className = "text-muted small text-end mb-2";
+            frischeEl.textContent = "Aktualisiert: " + stand;
+            mainContent.insertBefore(frischeEl, mainContent.firstChild);
+          }
+        }
+
         const resources = data.result.resources;
         calendarData = resources.filter((resource) =>
           resource.format.toLowerCase().includes("ics")
@@ -53,6 +93,16 @@ function loadAvailableCalendars(configData) {
         if (calendarData.length > 0) {
           createCalendarDropdown(calendarData);
           loadCalendar(calendarData[0].url);
+
+          const weitereHTML = renderWeitereInfos(configData);
+          if (weitereHTML) {
+            const mainContent = document.getElementById("main-content");
+            if (mainContent) {
+              const weitereEl = document.createElement("div");
+              weitereEl.innerHTML = weitereHTML;
+              mainContent.appendChild(weitereEl);
+            }
+          }
         } else {
           console.error("Keine Kalender im passenden Format gefunden.");
         }

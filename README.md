@@ -11,6 +11,8 @@ Die App ist eine "ODAP App V1".
 - Anzeigen der Termine
 - Vollbildansicht
 - Suchfunktion
+- Datenfrische-Indikator (CKAN metadata_modified)
+- Weiterführende Links (konfigurierbar)
 
 ## Entwicklung
 
