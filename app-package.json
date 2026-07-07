@@ -27,7 +27,7 @@
     "Verwaltungsprozess"
   ],
   "tags-dateityp": [
-    "ics"
+    "ICS"
   ],
   "tags-datenart": [
     "Termine",
@@ -38,7 +38,6 @@
     "docs/Mobile_Screenshot.png"
   ],
   "branding-css": "",
-  "apiversion": "1",
   "instanz-config": {
     "seitentitel": {
       "label": "Seitentitel",
