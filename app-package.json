@@ -3,7 +3,7 @@
   "app-entwickler-name": "mueller-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/app-icon.png",
   "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert alle Termine ansprechend und aktuell.",
@@ -159,6 +159,19 @@
         "laenge": 50
       },
       "default": "(C) Copyright {{jahr}} | App & Daten: {{odp.anbieter.name}} | App-Entwickler: {{app.developer.name}} | ODAS: {{odas.betreiber.name}}",
+      "erforderlich": "ja"
+    },
+    "proxyAktiv": {
+      "label": "ODAS-Proxy aktivieren",
+      "hilfe": "Mit ja werden Datenabrufe über den ODAS-Proxy gesendet. Der Proxy ist nur im ODAS-Live-System verfügbar; Entwicklung und Standalone verwenden nein.",
+      "default": "nein",
+      "format": {
+        "typ": "dropdown",
+        "optionen": [
+          "nein",
+          "ja"
+        ]
+      },
       "erforderlich": "ja"
     },
     "apiurl": {

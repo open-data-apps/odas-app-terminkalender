@@ -146,31 +146,89 @@ function app(configData, enclosingHtmlDivElement) {
 }
 
 // Hilfsfunktion: Nur Pfad aus vollständiger URL extrahieren
+function isOdasProxyEnabled(configdata = {}) {
+  return String(configdata.proxyAktiv || "").trim().toLowerCase() === "ja";
+}
+
 function extractPathFromUrl(url) {
   try {
-    const u = new URL(url);
-    return u.pathname + u.search;
-  } catch (e) {
-    return url;
+    const parsedUrl = new URL(url);
+    return parsedUrl.pathname + parsedUrl.search;
+  } catch (_error) {
+    return String(url || "");
   }
+}
+
+function getOdasAppBasePath(pathname) {
+  let appPath =
+    pathname === undefined
+      ? typeof window !== "undefined"
+        ? window.location.pathname
+        : "/"
+      : String(pathname || "/");
+
+  if (!appPath.endsWith("/")) {
+    const lastSlashIndex = appPath.lastIndexOf("/");
+    const lastSegment = appPath.substring(lastSlashIndex + 1);
+    if (lastSegment.includes(".")) {
+      appPath = appPath.substring(0, lastSlashIndex + 1);
+    }
+  }
+
+  return appPath.replace(/\/+$/, "");
+}
+
+function getOdasProxyEndpoint(targetUrl, pathname) {
+  const appPath = getOdasAppBasePath(pathname);
+  return `${appPath}/odp-data?path=${encodeURIComponent(
+    extractPathFromUrl(targetUrl),
+  )}`;
+}
+
+async function fetchViaOdasProxy(targetUrl) {
+  const response = await fetch(getOdasProxyEndpoint(targetUrl), {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error(`ODAS-Proxy-Fehler: HTTP ${response.status}`);
+  }
+
+  const proxyData = await response.json();
+  if (!proxyData || typeof proxyData.content !== "string") {
+    throw new Error("ODAS-Proxy-Antwort enthält keinen content-String.");
+  }
+
+  return proxyData.content;
+}
+
+async function fetchOdasResource(targetUrl, configdata = {}) {
+  if (isOdasProxyEnabled(configdata)) {
+    return fetchViaOdasProxy(targetUrl);
+  }
+
+  try {
+    const response = await fetch(targetUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return response.text();
+  } catch (error) {
+    throw new Error(
+      `Direkter Datenabruf fehlgeschlagen (${error.message}). Bitte prüfen Sie die Daten-URL und die CORS-Freigabe der Datenquelle.`,
+    );
+  }
+}
+
+async function fetchOdasJson(targetUrl, configdata = {}) {
+  return JSON.parse(await fetchOdasResource(targetUrl, configdata));
 }
 
 // Lade Kalender von der API über Proxy
 function loadAvailableCalendars(configData) {
-  const fullPath = window.location.pathname.replace(/\/+$/, "");
-  const resourcePath = extractPathFromUrl(configData.apiurl);
-  const proxyEndpoint = `${fullPath}/odp-data?path=${resourcePath}`;
-
-  fetch(proxyEndpoint, { method: "POST" })
-    .then((response) => response.json())
-    .then((proxyData) => {
-      let data;
-      try {
-        data = JSON.parse(proxyData.content);
-      } catch (e) {
-        console.error("Fehler beim Parsen der Kalenderdaten:", e);
-        return;
-      }
+  // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
+  fetchOdasJson(configData.apiurl, configData)
+    .then((data) => {
       if (data.success && data.result.resources) {
         const stand = extractDatenStand(data);
         if (stand) {
@@ -189,8 +247,8 @@ function loadAvailableCalendars(configData) {
         );
 
         if (calendarData.length > 0) {
-          createCalendarDropdown(calendarData);
-          loadCalendar(calendarData[0].url);
+          createCalendarDropdown(calendarData, configData);
+          loadCalendar(calendarData[0].url, configData);
 
           const methodikHTML = renderMethodikbox(configData, stand);
           if (methodikHTML) {
@@ -222,7 +280,7 @@ function loadAvailableCalendars(configData) {
 }
 
 // Dropdown-Menü erstellen
-function createCalendarDropdown(resources) {
+function createCalendarDropdown(resources, configData = {}) {
   const mainContent = document.getElementById("calendarOptions");
   const dropdownContainer = document.createElement("div");
   dropdownContainer.className = "mb-3";
@@ -239,7 +297,7 @@ function createCalendarDropdown(resources) {
   });
 
   dropdown.addEventListener("change", (event) => {
-    loadCalendar(event.target.value); // Lade den ausgewählten Kalender
+    loadCalendar(event.target.value, configData); // Lade den ausgewählten Kalender
   });
 
   dropdownContainer.appendChild(dropdown);
@@ -247,27 +305,16 @@ function createCalendarDropdown(resources) {
 }
 
 // Kalender laden und anzeigen (ICS über Proxy laden)
-function loadCalendar(calendarUrl) {
+function loadCalendar(calendarUrl, configData = {}) {
   if (!calendarUrl) {
     console.error("Keine URL für den Kalender angegeben.");
     return;
   }
-  const fullPath = window.location.pathname.replace(/\/+$/, "");
-  const resourcePath = extractPathFromUrl(calendarUrl);
-  const proxyEndpoint = `${fullPath}/odp-data?path=${resourcePath}`;
-
-  fetch(proxyEndpoint, { method: "POST" })
-    .then((response) => response.json())
-    .then(async (proxyData) => {
+  // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
+  fetchOdasResource(calendarUrl, configData)
+    .then(async (icsData) => {
       await ensureCalendarAssets();
 
-      let icsData;
-      try {
-        icsData = proxyData.content;
-      } catch (e) {
-        console.error("Fehler beim Parsen der ICS-Daten:", e);
-        return;
-      }
       const events = parseIcsToEvents(icsData);
       const calendarElement = document.getElementById("calendar");
 
