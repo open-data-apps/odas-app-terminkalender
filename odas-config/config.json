@@ -5,7 +5,7 @@
   "seitentitel": "Terminkalender",
   "icon": "logo_ondics.png",
   "brandingCSS": "",
-  "brandingCSSFile": "",
+  "brandingCSSFile": "../assets/branding.css",
   "beschreibung": [
     "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
     "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
