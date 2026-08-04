@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert alle Termine ansprechend und aktuell.",
@@ -137,7 +137,8 @@
       },
       "default": [
         "_multiline_",
-        "Alle Daten sind geschützt."
+        "Alle Daten sind geschützt.",
+        "<h3>Beim Aufruf kontaktierte Drittanbieter</h3><p>Beim Aufruf dieser App werden Bibliotheken bzw. Kartendienste von folgenden externen Servern geladen. Dabei werden IP-Adresse und User-Agent der Besucher:innen an diese Anbieter übertragen:</p><ul><li><strong>cdn.jsdelivr.net</strong> — Bootstrap (Layout- und UI-Framework)</li><li><strong>cdnjs.cloudflare.com</strong> — ical.js (ICS-Kalenderparsing)</li></ul>"
       ],
       "erforderlich": "ja"
     },
