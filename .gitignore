@@ -42,3 +42,5 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+# Liefer-ZIP (Bauartefakt, wird bei Bedarf mit make zip erzeugt)
+*.zip
