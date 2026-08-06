@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.12.0 - 2026-08-06
+- FIX: Drittanbieterliste "Beim Aufruf kontaktierte Drittanbieter" entfernt — alle Programmbibliotheken liegen jetzt lokal in `app/vendor/`, beim Aufruf werden keine externen Bibliotheksserver mehr kontaktiert
+
 ## 1.11.0 - 2026-08-06
 - FIX: ical.js vendored in `app/vendor/` statt von CDN geladen (Vendoring Teil 3) — Standalone-Betrieb laedt die Zusatzbibliotheken nicht mehr extern
 
