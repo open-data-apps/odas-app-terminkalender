@@ -136,13 +136,13 @@ function extractDatenStand(apiResponse) {
 
 function app(configData, enclosingHtmlDivElement) {
   enclosingHtmlDivElement.innerHTML = `<div class="row">
-      <div class="col-12" id="calendarOptions">
+      <div class="col-12" id="tk-calendarOptions">
       </div>
       </div>
     </div>
-    <div id="calendar">
+    <div id="tk-calendar">
     </div>`;
-  loadAvailableCalendars(configData);
+  loadAvailableCalendars(configData, enclosingHtmlDivElement);
 }
 
 // Hilfsfunktion: Nur Pfad aus vollständiger URL extrahieren
@@ -225,7 +225,7 @@ async function fetchOdasJson(targetUrl, configdata = {}) {
 }
 
 // Lade Kalender von der API über Proxy
-function loadAvailableCalendars(configData) {
+function loadAvailableCalendars(configData, root) {
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasJson(configData.apiurl, configData)
     .then((data) => {
@@ -247,8 +247,8 @@ function loadAvailableCalendars(configData) {
         );
 
         if (calendarData.length > 0) {
-          createCalendarDropdown(calendarData, configData);
-          loadCalendar(calendarData[0].url, configData);
+          createCalendarDropdown(calendarData, configData, root);
+          loadCalendar(calendarData[0].url, configData, root);
 
           const methodikHTML = renderMethodikbox(configData, stand);
           if (methodikHTML) {
@@ -280,8 +280,8 @@ function loadAvailableCalendars(configData) {
 }
 
 // Dropdown-Menü erstellen
-function createCalendarDropdown(resources, configData = {}) {
-  const mainContent = document.getElementById("calendarOptions");
+function createCalendarDropdown(resources, configData = {}, root) {
+  const mainContent = root.querySelector("#tk-calendarOptions");
   const dropdownContainer = document.createElement("div");
   dropdownContainer.className = "mb-3";
 
@@ -297,7 +297,7 @@ function createCalendarDropdown(resources, configData = {}) {
   });
 
   dropdown.addEventListener("change", (event) => {
-    loadCalendar(event.target.value, configData); // Lade den ausgewählten Kalender
+    loadCalendar(event.target.value, configData, root); // Lade den ausgewählten Kalender
   });
 
   dropdownContainer.appendChild(dropdown);
@@ -305,7 +305,7 @@ function createCalendarDropdown(resources, configData = {}) {
 }
 
 // Kalender laden und anzeigen (ICS über Proxy laden)
-function loadCalendar(calendarUrl, configData = {}) {
+function loadCalendar(calendarUrl, configData = {}, root) {
   if (!calendarUrl) {
     console.error("Keine URL für den Kalender angegeben.");
     return;
@@ -316,10 +316,10 @@ function loadCalendar(calendarUrl, configData = {}) {
       await ensureCalendarAssets();
 
       const events = parseIcsToEvents(icsData);
-      const calendarElement = document.getElementById("calendar");
+      const calendarElement = root.querySelector("#tk-calendar");
 
       const calendarInstance = new calendarJs(
-        "calendar",
+        "tk-calendar",
         window.__TRANSLATION_OPTIONS || {},
         {
           manualEditingEnabled: false,
