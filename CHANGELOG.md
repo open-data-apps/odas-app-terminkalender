@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.13.0 - 2026-08-06
+- FIX: Datenschutzangabe beschreibt den tatsaechlichen Stand nach dem Vendoring (Welle G)
+
 ## 1.12.0 - 2026-08-06
 - FIX: Drittanbieterliste "Beim Aufruf kontaktierte Drittanbieter" entfernt — alle Programmbibliotheken liegen jetzt lokal in `app/vendor/`, beim Aufruf werden keine externen Bibliotheksserver mehr kontaktiert
 
