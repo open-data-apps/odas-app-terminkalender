@@ -80,7 +80,7 @@ function ensureCalendarAssets() {
     loadStyleOnce("tk-calendar-css", appAssetUrl("dist/calendar.js.min.css")),
     loadScriptOnce(
       "tk-ical-js",
-      "https://cdnjs.cloudflare.com/ajax/libs/ical.js/1.4.0/ical.min.js",
+      "vendor/icaljs/ical.min.js",
       "ICAL",
     ),
     loadScriptOnce(
