@@ -361,7 +361,7 @@ function calendarJs(ol, pl, ql) {
             m.style.borderColor = h.style.color;
             l.appendChild(m);
           }
-          l.innerHTML += rc(g.title);
+          l.textContent += g.title;
           h.appendChild(l);
           l = k("div", "date");
           h.appendChild(l);
@@ -623,7 +623,7 @@ function calendarJs(ol, pl, ql) {
       de(h, a, Xe(a, c));
       ee(h, a, g);
       Z(a.from, c) && (h.id = "full-day-" + a.id);
-      A(b.events.onFullDayEventRender, h, a) || (e = k("div", "title"), L(a.repeatEvery) > z.never && (g = k("div", "ib-refresh-medium ib-no-hover ib-no-active"), g.style.borderColor = h.style.color, e.appendChild(g)), e.innerHTML += rc(a.title), h.appendChild(e), a.isAllDay && !b.views.fullDay.showAllDayEventDetails) || (e = k("div", "date"), h.appendChild(e), g = k("div", "duration"), h.appendChild(g), a.from.getDate() === a.to.getDate() ? a.isAllDay ? D(e, b.allDayText) : (D(e, fe(a.from, a.to)), 
+      A(b.events.onFullDayEventRender, h, a) || (e = k("div", "title"), L(a.repeatEvery) > z.never && (g = k("div", "ib-refresh-medium ib-no-hover ib-no-active"), g.style.borderColor = h.style.color, e.appendChild(g)), e.textContent += a.title, h.appendChild(e), a.isAllDay && !b.views.fullDay.showAllDayEventDetails) || (e = k("div", "date"), h.appendChild(e), g = k("div", "duration"), h.appendChild(g), a.from.getDate() === a.to.getDate() ? a.isAllDay ? D(e, b.allDayText) : (D(e, fe(a.from, a.to)), 
       D(g, Ub(a.from, a.to))) : (Ye(e, a.from, a.to), D(g, Ub(a.from, a.to))), g.innerHTML === n.empty && h.removeChild(g), Fa(a.repeatEvery) && a.repeatEvery > z.never && (e = k("div", "repeats"), D(e, b.repeatsText.replace(":", n.empty) + n.space + vd(a.repeatEvery)), h.appendChild(e)), ab(a.location) && (e = k("div", "location"), D(e, a.location), h.appendChild(e)), ab(a.description) && (e = k("div", "description"), D(e, a.description), h.appendChild(e)));
       h.addEventListener("click", function(l) {
         jf(l, a);
@@ -864,7 +864,7 @@ function calendarJs(ol, pl, ql) {
       de(m, d, Xe(d, h));
       ee(m, d, e);
       Z(d.from, h) && (m.id = "week-day-" + d.id);
-      A(b.events.onFullWeekEventRender, m, d) || (c = k("div", "title"), L(d.repeatEvery) > z.never && (g = k("div", "ib-refresh-medium ib-no-hover ib-no-active"), g.style.borderColor = m.style.color, c.appendChild(g)), c.innerHTML += rc(d.title), m.appendChild(c), d.isAllDay && !b.views.fullWeek.showAllDayEventDetails) || (c = k("div", "date"), m.appendChild(c), g = k("div", "duration"), m.appendChild(g), d.from.getDate() === d.to.getDate() ? d.isAllDay ? D(c, b.allDayText) : (D(c, fe(d.from, d.to)), 
+      A(b.events.onFullWeekEventRender, m, d) || (c = k("div", "title"), L(d.repeatEvery) > z.never && (g = k("div", "ib-refresh-medium ib-no-hover ib-no-active"), g.style.borderColor = m.style.color, c.appendChild(g)), c.textContent += d.title, m.appendChild(c), d.isAllDay && !b.views.fullWeek.showAllDayEventDetails) || (c = k("div", "date"), m.appendChild(c), g = k("div", "duration"), m.appendChild(g), d.from.getDate() === d.to.getDate() ? d.isAllDay ? D(c, b.allDayText) : (D(c, fe(d.from, d.to)), 
       D(g, Ub(d.from, d.to))) : (Ye(c, d.from, d.to), D(g, Ub(d.from, d.to))), g.innerHTML === n.empty && m.removeChild(g), Fa(d.repeatEvery) && d.repeatEvery > z.never && (c = k("div", "repeats"), D(c, b.repeatsText.replace(":", n.empty) + n.space + vd(d.repeatEvery)), m.appendChild(c)), ab(d.location) && (c = k("div", "location"), D(c, d.location), m.appendChild(c)), ab(d.description) && (c = k("div", "description"), D(c, d.description), m.appendChild(c)));
       m.addEventListener("click", function(q) {
         jf(q, d);
@@ -1293,7 +1293,7 @@ function calendarJs(ol, pl, ql) {
             var h = c.title, l = L(c.repeatEvery);
             b.views.fullMonth.showTimesInEvents && !c.isAllDay && c.from.getDate() === c.to.getDate() && (h = fe(c.from, c.to) + ": " + h);
             l > z.never && (l = k("div", "ib-refresh-small ib-no-hover ib-no-active"), l.style.borderColor = e.style.color, e.appendChild(l));
-            e.innerHTML += rc(h);
+            e.textContent += h;
           }
         }
         d.appendChild(e);
@@ -1569,7 +1569,7 @@ function calendarJs(ol, pl, ql) {
           e.style.borderColor = d.style.color;
           c.appendChild(e);
         }
-        c.innerHTML += rc(a.title);
+        c.textContent += a.title;
         d.appendChild(c);
         c = k("div", "date");
         d.appendChild(c);
@@ -1715,7 +1715,7 @@ function calendarJs(ol, pl, ql) {
         g.style.borderColor = d.style.color;
         d.appendChild(g);
       }
-      d.innerHTML += rc(c.title);
+d.textContent += c.title;
     }
     d.oncontextmenu = function(h) {
       gf(h, c, e);
@@ -2965,7 +2965,7 @@ function calendarJs(ol, pl, ql) {
                 Yd.innerHTML = n.empty, Yd.onclick = null, mb(Y, Yd);
               }
               L(c.repeatEvery) > z.never && (g = k("div", "ib-refresh-medium ib-no-hover ib-no-active"), g.style.borderColor = Wd.style.color, Wd.appendChild(g));
-              Wd.innerHTML += rc(c.title);
+              Wd.textContent += c.title;
               Fa(c.repeatEvery) && c.repeatEvery > z.never ? (D(eg, b.repeatsText.replace(":", n.empty) + n.space + vd(c.repeatEvery)), $b(Y, eg)) : (eg.innerHTML = n.empty, mb(Y, eg));
               ab(c.location) ? (D(gg, c.location), $b(Y, gg)) : (gg.innerHTML = n.empty, mb(Y, gg));
               ab(c.description) ? (D(fg, c.description), $b(Y, fg)) : (fg.innerHTML = n.empty, mb(Y, fg));

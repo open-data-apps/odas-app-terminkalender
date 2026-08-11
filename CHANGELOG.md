@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.15.0 - 2026-08-11
+- FIX: XSS- und URL-Vertrag geschlossen (F-35): Vendor-Patch `dist/calendar.js`/`dist/calendar.min.js` — Kalender-Titel werden per `textContent` statt `innerHTML` + `rc()` gesetzt; damit endet die Entity-Doppeldekodierung (ICAL + `rc()`) am Titel-Sink, aus `&lt;img …&gt;` im ICS-Titel wird wörtlicher Text statt ausführbares Markup
+
 ## 1.14.0 - 2026-08-06
 - FIX: DOM-Zugriffe auf den App-Container gescopt; Kalender-IDs mit App-Praefix versehen (F-25)
 
