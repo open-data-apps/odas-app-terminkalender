@@ -349,6 +349,23 @@ function createCalendarDropdown(state, resources, configData = {}, root) {
   mainContent.prepend(dropdownContainer);
 }
 
+// Zerstoert eine vorhandene calendarJs-Instanz und leert den root-lokalen
+// Kalendercontainer. Wirft destroy() (Drittanbieter-Code), bleibt die
+// Leerung trotzdem garantiert.
+function destroyCalendarInstance(calendarElement) {
+  if (!calendarElement) return;
+  const instance = calendarElement.__calendarInstance;
+  if (instance && typeof instance.destroy === "function") {
+    try {
+      instance.destroy();
+    } catch (error) {
+      console.error("Fehler beim Zerstören der Kalenderinstanz:", error);
+    }
+  }
+  calendarElement.__calendarInstance = null;
+  calendarElement.innerHTML = "";
+}
+
 // Kalender laden und anzeigen (ICS über Proxy laden)
 function loadCalendar(state, calendarUrl, configData = {}, root) {
   if (!calendarUrl) {
@@ -361,6 +378,10 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
     return;
   }
   setTkStatus(state, "", "");
+  // Neuer Ladevorgang: vorherige Instanz zerstoeren und Container leeren,
+  // damit beim Ressourcenwechsel keine stale Kalender-DOM stehen bleibt.
+  const calendarElement = root.querySelector("#tk-calendar-" + state.uid);
+  destroyCalendarInstance(calendarElement);
   // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasResource(calendarUrl, configData)
     .then(async (icsData) => {
@@ -376,7 +397,6 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       } else {
         setTkStatus(state, "", "");
       }
-      const calendarElement = root.querySelector("#tk-calendar-" + state.uid);
 
       const calendarInstance = new calendarJs(
         "tk-calendar-" + state.uid,
@@ -390,11 +410,16 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
           exportICS: true,
         }
       );
-      calendarInstance.setEvents(events);
+      // Instanz registrieren, bevor setEvents laeuft: schlaegt der weitere
+      // Aufbau fehl, kann der catch sie zerstoeren statt sie zu verlieren.
       calendarElement.__calendarInstance = calendarInstance;
+      calendarInstance.setEvents(events);
     })
     .catch((err) => {
       console.error("Fehler beim Laden der Kalenderdaten:", err);
+      // Auch eine frisch angelegte, fehlgeschlagene Instanz raeumen, damit
+      // kein halb gerendertes Kalender-DOM zurueckbleibt.
+      destroyCalendarInstance(calendarElement);
       setTkStatus(
         state,
         "danger",

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.18.0 - 2026-08-11
+- FIX: Stale-Kalender-DOM beim Ressourcenwechsel beseitigt (F-45-Rest): `loadCalendar` zerstört vor jedem neuen Ladevorgang die vorherige `calendarJs`-Instanz (`calendarElement.__calendarInstance.destroy()`) und leert den root-lokalen Kalendercontainer `#tk-calendar-<uid>`; schlägt der Aufbau nach Anlage der neuen Instanz fehl (z. B. `setEvents` wirft), wird auch diese Instanz zerstört und der Container geleert — der danger-Status bleibt sichtbar, andere F-45-Zustände bleiben unverändert
+
 ## 1.17.0 - 2026-08-11
 - FIX: Kalender-Zustände getrennt darstellen (F-45): Root-lokaler Statusbereich `#tk-status-<uid>` mit `setTkStatus(state, typ, html)` ersetzt stumme `console.error`-Pfade; vier Zustände werden unterschieden — Quelle fehlt/nicht erreichbar/ungültige API-Antwort und Parserfehler zeigen einen sichtbaren Fehler (danger) statt eines leeren Kalenders, gültig aber ohne ICS-Ressourcen oder ohne Termine zeigt einen Leer-Hinweis (info), gültig mit Ereignissen rendert normal; Format-Guard `String((resource && resource.format) || "").toLowerCase()` verhindert den TypeError bei Ressourcen ohne `format`; `parseIcsToEvents` wirft Parse-Fehler statt still ein leeres Array zu liefern, der Aufrufer setzt den Fehlerstatus
 
