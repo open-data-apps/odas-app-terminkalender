@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.16.0 - 2026-08-11
+- FIX: Laufzeitzustand pro App-Instanz isoliert (F-42): Instanzzähler `tkInstanzZaehler` ergänzt, Modul-Global `calendarData` in ein pro `app()`-Aufruf geschlossenes `state`-Objekt (uid, root, config, calendarData) gezogen; Kalender- und Options-Container tragen instanzeindeutige IDs (`tk-calendar-<uid>`, `tk-calendarOptions-<uid>`), `new calendarJs("tk-calendar-<uid>", …)` zielt auf die eigene Instanz; Datenfrische-, Methodik- und Weitere-Infos-Block werden in den Root-Container gerendert statt ins globale `#main-content`
+
 ## 1.15.0 - 2026-08-11
 - FIX: XSS- und URL-Vertrag geschlossen (F-35): Vendor-Patch `dist/calendar.js`/`dist/calendar.min.js` — Kalender-Titel werden per `textContent` statt `innerHTML` + `rc()` gesetzt; damit endet die Entity-Doppeldekodierung (ICAL + `rc()`) am Titel-Sink, aus `&lt;img …&gt;` im ICS-Titel wird wörtlicher Text statt ausführbares Markup
 

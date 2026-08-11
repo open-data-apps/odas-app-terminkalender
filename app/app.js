@@ -5,7 +5,7 @@
  * @param {Object} configdata - Alle Konfigurationsdaten der App
  * @returns {string} - darzustellendes HTML
  */
-let calendarData = {};
+let tkInstanzZaehler = 0;
 let calendarAssetsPromise = null;
 
 function escapeHtml(str) {
@@ -135,14 +135,23 @@ function extractDatenStand(apiResponse) {
 }
 
 function app(configData, enclosingHtmlDivElement) {
+  // F-42: pro Instanz geschlossener State (Closure in app())
+  const state = {
+    uid: "i" + ++tkInstanzZaehler,
+    root: enclosingHtmlDivElement,
+    config: configData,
+    disposed: false, // wird in Task 9 (onPageLeave) gesetzt
+    calendarData: {},
+  };
+  const tkUid = state.uid;
   enclosingHtmlDivElement.innerHTML = `<div class="row">
-      <div class="col-12" id="tk-calendarOptions">
+      <div class="col-12" id="tk-calendarOptions-${tkUid}">
       </div>
       </div>
     </div>
-    <div id="tk-calendar">
+    <div id="tk-calendar-${tkUid}">
     </div>`;
-  loadAvailableCalendars(configData, enclosingHtmlDivElement);
+  loadAvailableCalendars(state, configData, enclosingHtmlDivElement);
 }
 
 // Hilfsfunktion: Nur Pfad aus vollständiger URL extrahieren
@@ -225,49 +234,40 @@ async function fetchOdasJson(targetUrl, configdata = {}) {
 }
 
 // Lade Kalender von der API über Proxy
-function loadAvailableCalendars(configData, root) {
+function loadAvailableCalendars(state, configData, root) {
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasJson(configData.apiurl, configData)
     .then((data) => {
       if (data.success && data.result.resources) {
         const stand = extractDatenStand(data);
         if (stand) {
-          const mainContent = document.getElementById("main-content");
-          if (mainContent) {
-            const frischeEl = document.createElement("div");
-            frischeEl.className = "text-muted small text-end mb-2";
-            frischeEl.textContent = "Aktualisiert: " + stand;
-            mainContent.insertBefore(frischeEl, mainContent.firstChild);
-          }
+          const frischeEl = document.createElement("div");
+          frischeEl.className = "text-muted small text-end mb-2";
+          frischeEl.textContent = "Aktualisiert: " + stand;
+          root.prepend(frischeEl);
         }
 
         const resources = data.result.resources;
-        calendarData = resources.filter((resource) =>
+        state.calendarData = resources.filter((resource) =>
           resource.format.toLowerCase().includes("ics")
         );
 
-        if (calendarData.length > 0) {
-          createCalendarDropdown(calendarData, configData, root);
-          loadCalendar(calendarData[0].url, configData, root);
+        if (state.calendarData.length > 0) {
+          createCalendarDropdown(state, state.calendarData, configData, root);
+          loadCalendar(state, state.calendarData[0].url, configData, root);
 
           const methodikHTML = renderMethodikbox(configData, stand);
           if (methodikHTML) {
-            const mainContent = document.getElementById("main-content");
-            if (mainContent) {
-              const methodikEl = document.createElement("div");
-              methodikEl.innerHTML = methodikHTML;
-              mainContent.appendChild(methodikEl);
-            }
+            const methodikEl = document.createElement("div");
+            methodikEl.innerHTML = methodikHTML;
+            root.appendChild(methodikEl);
           }
 
           const weitereHTML = renderWeitereInfos(configData);
           if (weitereHTML) {
-            const mainContent = document.getElementById("main-content");
-            if (mainContent) {
-              const weitereEl = document.createElement("div");
-              weitereEl.innerHTML = weitereHTML;
-              mainContent.appendChild(weitereEl);
-            }
+            const weitereEl = document.createElement("div");
+            weitereEl.innerHTML = weitereHTML;
+            root.appendChild(weitereEl);
           }
         } else {
           console.error("Keine Kalender im passenden Format gefunden.");
@@ -280,8 +280,8 @@ function loadAvailableCalendars(configData, root) {
 }
 
 // Dropdown-Menü erstellen
-function createCalendarDropdown(resources, configData = {}, root) {
-  const mainContent = root.querySelector("#tk-calendarOptions");
+function createCalendarDropdown(state, resources, configData = {}, root) {
+  const mainContent = root.querySelector("#tk-calendarOptions-" + state.uid);
   const dropdownContainer = document.createElement("div");
   dropdownContainer.className = "mb-3";
 
@@ -297,7 +297,7 @@ function createCalendarDropdown(resources, configData = {}, root) {
   });
 
   dropdown.addEventListener("change", (event) => {
-    loadCalendar(event.target.value, configData, root); // Lade den ausgewählten Kalender
+    loadCalendar(state, event.target.value, configData, root); // Lade den ausgewählten Kalender
   });
 
   dropdownContainer.appendChild(dropdown);
@@ -305,7 +305,7 @@ function createCalendarDropdown(resources, configData = {}, root) {
 }
 
 // Kalender laden und anzeigen (ICS über Proxy laden)
-function loadCalendar(calendarUrl, configData = {}, root) {
+function loadCalendar(state, calendarUrl, configData = {}, root) {
   if (!calendarUrl) {
     console.error("Keine URL für den Kalender angegeben.");
     return;
@@ -316,10 +316,10 @@ function loadCalendar(calendarUrl, configData = {}, root) {
       await ensureCalendarAssets();
 
       const events = parseIcsToEvents(icsData);
-      const calendarElement = root.querySelector("#tk-calendar");
+      const calendarElement = root.querySelector("#tk-calendar-" + state.uid);
 
       const calendarInstance = new calendarJs(
-        "tk-calendar",
+        "tk-calendar-" + state.uid,
         window.__TRANSLATION_OPTIONS || {},
         {
           manualEditingEnabled: false,
