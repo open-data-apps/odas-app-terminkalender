@@ -149,9 +149,35 @@ function app(configData, enclosingHtmlDivElement) {
       </div>
       </div>
     </div>
+    <div id="tk-status-${tkUid}">
+    </div>
     <div id="tk-calendar-${tkUid}">
     </div>`;
   loadAvailableCalendars(state, configData, enclosingHtmlDivElement);
+}
+
+// ── SICHTBARE ZUSTÄNDE ───────────────────────────────────────────────────────
+// Jeder Fehlerpfad muss die Oberfläche erreichen. Ein stumm leerer Kalender ist
+// von "derzeit keine Termine" nicht zu unterscheiden.
+
+function setTkStatus(state, typ, html) {
+  const status =
+    state && state.root
+      ? state.root.querySelector("#tk-status-" + state.uid)
+      : null;
+  if (!status) return;
+  if (!html) {
+    status.innerHTML = "";
+    return;
+  }
+  const cssClass =
+    typ === "warning"
+      ? "alert-warning"
+      : typ === "danger"
+        ? "alert-danger"
+        : "alert-info";
+  status.innerHTML =
+    '<div class="alert ' + cssClass + '" role="alert">' + html + "</div>";
 }
 
 // Hilfsfunktion: Nur Pfad aus vollständiger URL extrahieren
@@ -248,8 +274,11 @@ function loadAvailableCalendars(state, configData, root) {
         }
 
         const resources = data.result.resources;
-        state.calendarData = resources.filter((resource) =>
-          resource.format.toLowerCase().includes("ics")
+        state.calendarData = resources.filter(
+          (resource) =>
+            String((resource && resource.format) || "")
+              .toLowerCase()
+              .includes("ics"),
         );
 
         if (state.calendarData.length > 0) {
@@ -270,13 +299,29 @@ function loadAvailableCalendars(state, configData, root) {
             root.appendChild(weitereEl);
           }
         } else {
-          console.error("Keine Kalender im passenden Format gefunden.");
+          setTkStatus(
+            state,
+            "info",
+            "Keine Kalender im passenden Format (ICS) gefunden.",
+          );
         }
       } else {
-        console.error("Fehlerhafte API-Antwort:", data);
+        setTkStatus(
+          state,
+          "danger",
+          "Die Kalenderdaten konnten nicht geladen werden (fehlerhafte API-Antwort).",
+        );
       }
     })
-    .catch((err) => console.error("Fehler beim Laden der Kalenderdaten:", err));
+    .catch((err) => {
+      console.error("Fehler beim Laden der Kalenderdaten:", err);
+      setTkStatus(
+        state,
+        "danger",
+        "Die Kalenderdaten konnten nicht geladen werden: " +
+          escapeHtml(err.message),
+      );
+    });
 }
 
 // Dropdown-Menü erstellen
@@ -308,14 +353,29 @@ function createCalendarDropdown(state, resources, configData = {}, root) {
 function loadCalendar(state, calendarUrl, configData = {}, root) {
   if (!calendarUrl) {
     console.error("Keine URL für den Kalender angegeben.");
+    setTkStatus(
+      state,
+      "danger",
+      "Für den ausgewählten Kalender ist keine Datenquelle hinterlegt.",
+    );
     return;
   }
+  setTkStatus(state, "", "");
   // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasResource(calendarUrl, configData)
     .then(async (icsData) => {
       await ensureCalendarAssets();
 
       const events = parseIcsToEvents(icsData);
+      if (events.length === 0) {
+        setTkStatus(
+          state,
+          "info",
+          "Für diesen Kalender sind derzeit keine Termine hinterlegt.",
+        );
+      } else {
+        setTkStatus(state, "", "");
+      }
       const calendarElement = root.querySelector("#tk-calendar-" + state.uid);
 
       const calendarInstance = new calendarJs(
@@ -333,7 +393,14 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       calendarInstance.setEvents(events);
       calendarElement.__calendarInstance = calendarInstance;
     })
-    .catch((err) => console.error("Fehler beim Laden der Kalenderdaten:", err));
+    .catch((err) => {
+      console.error("Fehler beim Laden der Kalenderdaten:", err);
+      setTkStatus(
+        state,
+        "danger",
+        "Der Kalender konnte nicht geladen werden: " + escapeHtml(err.message),
+      );
+    });
 }
 
 // Termine aus ICS-Daten extrahieren
@@ -357,37 +424,33 @@ function getRandomColor() {
 // Termine aus ICS-Daten extrahieren
 function parseIcsToEvents(icsData) {
   const events = [];
-  try {
-    const jcalData = ICAL.parse(icsData);
-    const component = new ICAL.Component(jcalData);
-    const vevents = component.getAllSubcomponents("vevent");
+  const jcalData = ICAL.parse(icsData);
+  const component = new ICAL.Component(jcalData);
+  const vevents = component.getAllSubcomponents("vevent");
 
-    vevents.forEach((vevent) => {
-      const event = new ICAL.Event(vevent);
+  vevents.forEach((vevent) => {
+    const event = new ICAL.Event(vevent);
 
-      const title = event.summary || "Kein Titel";
+    const title = event.summary || "Kein Titel";
 
-      // Farbe für den Termin bestimmen
-      let color;
-      if (eventColors[title]) {
-        color = eventColors[title]; // Existierende Farbe nutzen
-      } else {
-        color = getRandomColor(); // Neue Farbe generieren
-        eventColors[title] = color; // Farbe speichern
-      }
+    // Farbe für den Termin bestimmen
+    let color;
+    if (eventColors[title]) {
+      color = eventColors[title]; // Existierende Farbe nutzen
+    } else {
+      color = getRandomColor(); // Neue Farbe generieren
+      eventColors[title] = color; // Farbe speichern
+    }
 
-      // Ereignis hinzufügen
-      events.push({
-        from: new Date(event.startDate.toJSDate()),
-        to: new Date(event.endDate.toJSDate()),
-        title: title,
-        description: event.description || "Keine Beschreibung verfügbar",
-        color: color, // Farbe setzen
-      });
+    // Ereignis hinzufügen
+    events.push({
+      from: new Date(event.startDate.toJSDate()),
+      to: new Date(event.endDate.toJSDate()),
+      title: title,
+      description: event.description || "Keine Beschreibung verfügbar",
+      color: color, // Farbe setzen
     });
-  } catch (error) {
-    console.error("Fehler beim Parsen der ICS-Daten:", error);
-  }
+  });
   return events;
 }
 

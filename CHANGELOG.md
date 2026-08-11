@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.17.0 - 2026-08-11
+- FIX: Kalender-Zustände getrennt darstellen (F-45): Root-lokaler Statusbereich `#tk-status-<uid>` mit `setTkStatus(state, typ, html)` ersetzt stumme `console.error`-Pfade; vier Zustände werden unterschieden — Quelle fehlt/nicht erreichbar/ungültige API-Antwort und Parserfehler zeigen einen sichtbaren Fehler (danger) statt eines leeren Kalenders, gültig aber ohne ICS-Ressourcen oder ohne Termine zeigt einen Leer-Hinweis (info), gültig mit Ereignissen rendert normal; Format-Guard `String((resource && resource.format) || "").toLowerCase()` verhindert den TypeError bei Ressourcen ohne `format`; `parseIcsToEvents` wirft Parse-Fehler statt still ein leeres Array zu liefern, der Aufrufer setzt den Fehlerstatus
+
 ## 1.16.0 - 2026-08-11
 - FIX: Laufzeitzustand pro App-Instanz isoliert (F-42): Instanzzähler `tkInstanzZaehler` ergänzt, Modul-Global `calendarData` in ein pro `app()`-Aufruf geschlossenes `state`-Objekt (uid, root, config, calendarData) gezogen; Kalender- und Options-Container tragen instanzeindeutige IDs (`tk-calendar-<uid>`, `tk-calendarOptions-<uid>`), `new calendarJs("tk-calendar-<uid>", …)` zielt auf die eigene Instanz; Datenfrische-, Methodik- und Weitere-Infos-Block werden in den Root-Container gerendert statt ins globale `#main-content`
 
