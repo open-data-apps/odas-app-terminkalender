@@ -382,10 +382,21 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
   // damit beim Ressourcenwechsel keine stale Kalender-DOM stehen bleibt.
   const calendarElement = root.querySelector("#tk-calendar-" + state.uid);
   destroyCalendarInstance(calendarElement);
+  // Latest-Load-Token: Nur der neueste Ladevorgang darf nach seinem Abschluss
+  // Instanz/DOM/Status anfassen. Ein veralteter Erfolg oder Fehler (Request A
+  // schlaegt spaet fehl, nachdem Request B bereits erfolgreich neu geladen
+  // hat) wird dadurch verworfen, statt die neuere Instanz zu zerstoeren.
+  state.calendarLadeToken = (state.calendarLadeToken || 0) + 1;
+  const ladeToken = state.calendarLadeToken;
   // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasResource(calendarUrl, configData)
     .then(async (icsData) => {
       await ensureCalendarAssets();
+      // Veralteter Erfolg: weder Kalenderinstanz/DOM noch Status des
+      // neueren Ladevorgangs veraendern.
+      if (state.calendarLadeToken !== ladeToken) {
+        return;
+      }
 
       const events = parseIcsToEvents(icsData);
       if (events.length === 0) {
@@ -416,6 +427,11 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       calendarInstance.setEvents(events);
     })
     .catch((err) => {
+      // Veralteter Fehler: Instanz/DOM/Status des neueren Ladevorgangs
+      // unangetastet lassen.
+      if (state.calendarLadeToken !== ladeToken) {
+        return;
+      }
       console.error("Fehler beim Laden der Kalenderdaten:", err);
       // Auch eine frisch angelegte, fehlgeschlagene Instanz raeumen, damit
       // kein halb gerendertes Kalender-DOM zurueckbleibt.
