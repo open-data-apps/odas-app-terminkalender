@@ -1,5 +1,9 @@
 # Changelog
 
+
+## 1.19.0 - 2026-08-12
+- FIX: `app/index.html` auf den Template-Stand (F-47): Datei byte-gleich aus `oda-generic` übernommen — gültiges HTML, deutsche ARIA-Labels, Footer im Body; Titel und Fußzeile bleiben Platzhalter und werden zur Laufzeit aus der Instanz-Config überschrieben
+
 ## 1.18.0 - 2026-08-11
 - FIX: Stale-Kalender-DOM beim Ressourcenwechsel beseitigt (F-45-Rest): `loadCalendar` zerstört vor jedem neuen Ladevorgang die vorherige `calendarJs`-Instanz (`calendarElement.__calendarInstance.destroy()`) und leert den root-lokalen Kalendercontainer `#tk-calendar-<uid>`; schlägt der Aufbau nach Anlage der neuen Instanz fehl (z. B. `setEvents` wirft), wird auch diese Instanz zerstört und der Container geleert — der danger-Status bleibt sichtbar, andere F-45-Zustände bleiben unverändert
 - FIX: Latest-Load-Token gegen veraltete Ladevorgänge (F-45-Rest, Review-Nachzug): Jeder `loadCalendar`-Aufruf erhält ein pro-Instanz-`state`-Token (`state.calendarLadeToken`); ein veralteter Erfolg oder Fehler (Request A schlägt spät fehl, nachdem Request B bereits erfolgreich neu geladen hat) verwirft seine Fortsetzung, statt die neuere Instanz samt DOM und Status zu verändern — der Guard sitzt direkt nach dem einzigen `await` im `then` und am Beginn des `catch`
