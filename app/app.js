@@ -261,6 +261,11 @@ async function fetchOdasJson(targetUrl, configdata = {}) {
 
 // Lade Kalender von der API über Proxy
 function loadAvailableCalendars(state, configData, root) {
+  const quelle = String(configData.apiurl || "").trim();
+  if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
+    setTkStatus(state, "info", "Es ist keine Datenquelle konfiguriert.");
+    return;
+  }
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasJson(configData.apiurl, configData)
     .then((data) => {
