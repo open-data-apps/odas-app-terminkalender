@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "version": "1.21.0",
+  "version": "1.22.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert alle Termine ansprechend und aktuell.",
@@ -178,7 +178,7 @@
     "apiurl": {
       "label": "URL zu den Daten",
       "category": "datenherkunft",
-      "hilfe": "Von dieser URL zum Datensatz werden die Ressoucen bezogen",
+      "hilfe": "Direkter, maschinenlesbarer Endpunkt, von dem die App die Ressourcen lädt — nicht die Datensatzseite im ODP (siehe „URL zum Datensatz im ODP\").",
       "format": {
         "typ": "url",
         "laenge": 255
@@ -207,8 +207,8 @@
       "format": {
         "typ": "url"
       },
-      "default": "",
-      "beispiel": "",
+      "default": "{{appconfig.datensatz-url}}",
+      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/termine",
       "erforderlich": "ja"
     },
     "datenStand": {
