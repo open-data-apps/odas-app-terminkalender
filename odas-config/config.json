@@ -1,5 +1,4 @@
 {
-  "apiVersion": "1",
   "proxyAktiv": "nein",
   "titel": "Terminkalender",
   "seitentitel": "Terminkalender",
@@ -28,8 +27,7 @@
     "<p>Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.</p>",
     "<p>Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter <code>proxyAktiv</code> der Instanz-Konfiguration.</p>"
   ],
-  "urlODP": "<a href='https://offenedaten.esslingen.de' target='_blank'>https://offenedaten.esslingen.de</a>",
-  "urlDaten": "<a href='https://offenedaten.esslingen.de/Ondics_GmbH' target='_blank'>https://offenedaten.esslingen.de/Ondics_GmbH</a>",
+  "urlDaten": "https://offenedaten.esslingen.de/Ondics_GmbH",
   "fusszeile": "(C) Copyright 2024 | Inhalt: Stadt Esslingen | App: Ondics GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
   "sprache": "de",
