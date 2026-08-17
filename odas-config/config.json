@@ -27,7 +27,7 @@
     "<p>Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.</p>",
     "<p>Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter <code>proxyAktiv</code> der Instanz-Konfiguration.</p>"
   ],
-  "urlDaten": "https://offenedaten.esslingen.de/Ondics_GmbH",
+  "urlDaten": "https://open-data-musterstadt.ckan.de/dataset/termine",
   "fusszeile": "(C) Copyright 2024 | Inhalt: Stadt Esslingen | App: Ondics GmbH | Provided by: Ondics GmbH",
   "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
   "sprache": "de",
