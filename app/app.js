@@ -450,8 +450,6 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
 }
 
 // Termine aus ICS-Daten extrahieren
-// Objekt zur Farbzuteilung
-const eventColors = {};
 const predefinedColors = [
   "#FF5733",
   "#33FF57",
@@ -462,9 +460,17 @@ const predefinedColors = [
   "#FFC733",
 ];
 
-// Zufällige Farbe generieren
-function getRandomColor() {
-  return predefinedColors[Math.floor(Math.random() * predefinedColors.length)];
+// Deterministische Farbe aus dem Titel ableiten (F-59/F-61): einfache
+// Zeichen-Prüfsumme modulo Palettenlänge statt Zufall + modulglobaler
+// eventColors-Map. Derselbe Titel ergibt bei jedem Lauf dieselbe Farbe; da
+// die Ableitung zustandslos ist, entfällt die zuvor über Instanzen und
+// Seitenwechsel hinweg geteilte, nie zurückgesetzte Map ganz.
+function colorForTitle(title) {
+  let checksum = 0;
+  for (let i = 0; i < title.length; i++) {
+    checksum = (checksum + title.charCodeAt(i)) % predefinedColors.length;
+  }
+  return predefinedColors[checksum];
 }
 
 // Termine aus ICS-Daten extrahieren
@@ -480,13 +486,7 @@ function parseIcsToEvents(icsData) {
     const title = event.summary || "Kein Titel";
 
     // Farbe für den Termin bestimmen
-    let color;
-    if (eventColors[title]) {
-      color = eventColors[title]; // Existierende Farbe nutzen
-    } else {
-      color = getRandomColor(); // Neue Farbe generieren
-      eventColors[title] = color; // Farbe speichern
-    }
+    const color = colorForTitle(title);
 
     // Ereignis hinzufügen
     events.push({
