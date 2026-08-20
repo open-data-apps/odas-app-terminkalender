@@ -8,6 +8,22 @@
 let tkInstanzZaehler = 0;
 let calendarAssetsPromise = null;
 
+// Laufzeit-Cleanups pro App-Instanz, je DOM-Container registriert. onPageLeave
+// iteriert alle registrierten Cleanups (try/catch) und leert die Registry
+// anschliessend — die app/app-base.js ruft onPageLeave beim Seitenwechsel auf.
+const tkCleanups = new Map();
+
+function onPageLeave() {
+  tkCleanups.forEach((cleanup) => {
+    try {
+      cleanup();
+    } catch (_err) {
+      // Ein einzelner Cleanup darf den Seitenwechsel nicht blockieren.
+    }
+  });
+  tkCleanups.clear();
+}
+
 function escapeHtml(str) {
   const s = String(str ?? "");
   return s
@@ -140,9 +156,14 @@ function app(configData, enclosingHtmlDivElement) {
     uid: "i" + ++tkInstanzZaehler,
     root: enclosingHtmlDivElement,
     config: configData,
-    disposed: false, // wird in Task 9 (onPageLeave) gesetzt
+    disposed: false,
     calendarData: {},
   };
+  tkCleanups.set(enclosingHtmlDivElement, () => {
+    state.disposed = true;
+    const calendarElement = enclosingHtmlDivElement.querySelector("#tk-calendar-" + state.uid);
+    destroyCalendarInstance(calendarElement);
+  });
   const tkUid = state.uid;
   enclosingHtmlDivElement.innerHTML = `<div class="row">
       <div class="col-12" id="tk-calendarOptions-${tkUid}">
@@ -391,6 +412,7 @@ function destroyCalendarInstance(calendarElement) {
 
 // Kalender laden und anzeigen (ICS über Proxy laden)
 function loadCalendar(state, calendarUrl, configData = {}, root) {
+  if (state.disposed) return;
   if (!calendarUrl) {
     console.error("Keine URL für den Kalender angegeben.");
     setTkStatus(
@@ -415,9 +437,9 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
   fetchOdasResource(calendarUrl, configData)
     .then(async (icsData) => {
       await ensureCalendarAssets();
-      // Veralteter Erfolg: weder Kalenderinstanz/DOM noch Status des
+      // Veralteter Erfolg / Disposed: weder Kalenderinstanz/DOM noch Status des
       // neueren Ladevorgangs veraendern.
-      if (state.calendarLadeToken !== ladeToken) {
+      if (state.disposed || state.calendarLadeToken !== ladeToken) {
         return;
       }
 
@@ -450,9 +472,9 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       calendarInstance.setEvents(events);
     })
     .catch((err) => {
-      // Veralteter Fehler: Instanz/DOM/Status des neueren Ladevorgangs
+      // Veralteter Fehler / Disposed: Instanz/DOM/Status des neueren Ladevorgangs
       // unangetastet lassen.
-      if (state.calendarLadeToken !== ladeToken) {
+      if (state.disposed || state.calendarLadeToken !== ladeToken) {
         return;
       }
       console.error("Fehler beim Laden der Kalenderdaten:", err);
