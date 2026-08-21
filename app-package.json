@@ -3,25 +3,43 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "version": "1.23.0",
+  "version": "1.24.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
-  "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert alle Termine ansprechend und aktuell.",
+  "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert öffentliche Termine übersichtlich im Kalender.",
   "beschreibung": [
     "_multiline_",
-    "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
-    "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
-    "<h3>Inhalte</h3>",
-    "<p>Die App verarbeitet Terminangaben aus einer konfigurierten Quelle und stellt Datum, Titel, Ort, Beschreibung und weitere verfügbare Felder dar.</p>",
-    "<h3>Nutzung</h3>",
-    "<p>Durchsuchen oder filtern Sie Termine und öffnen Sie Details zu einzelnen Einträgen. Die App zeigt die Angaben der Datenquelle; kurzfristige Änderungen sollten bei wichtigen Terminen zusätzlich über die zuständige Stelle geprüft werden.</p>",
-    "<h3>Für wen ist diese App?</h3>",
-    "<p>Die App richtet sich an Bürger:innen, Verwaltung, Veranstalter und Öffentlichkeitsarbeit, die Termine verständlich bereitstellen möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.</p>",
-    "<h3>Datenquelle</h3>",
-    "<p>Die Termine werden aus dem konfigurierten Open-Data-Datensatz geladen.</p>",
-    "<ul><li><strong>Open Data Portal:</strong> <a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><strong>Ressource/API-Endpunkt:</strong> <a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li></ul>",
-    "<h3>Open Data App Store</h3>",
-    "<p>Diese App ist für den Open Data App Store vorbereitet und kann mit Termin- und Veranstaltungskalendern anderer Kommunen betrieben werden.</p>"
+    "Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.",
+    "",
+    "Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine und hilft, Termine ohne Fachkenntnisse schnell zu finden.",
+    "",
+    "## Methodik",
+    "",
+    "Die App ruft die konfigurierte Datenquelle (`apiurl`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
+    "",
+    "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
+    "",
+    "Die Termine werden im Kalender (`calendarJs`, Sprache `de`) angezeigt; der Kalender bietet Monats-, Wochen- und Tagesansichten sowie eine eingebaute Suche und den Export der angezeigten Termine als ICS. Eigene Sortierungen, Kennzahlen, Karten oder automatische Aktualisierungen bietet die App nicht; einziger Filter auf App-Ebene ist der Ressourcen-Selektor. Liefert die CKAN-Antwort ein Änderungsdatum (`metadata_modified`), zeigt die App es als „Aktualisiert: TT.MM.JJJJ“ an. Verfügbarkeit und Aktualität der angezeigten Termine hängen vom Pflegestand der konfigurierten Quelle und der enthaltenen Ressourcen ab; eine Live-Garantie, Polling oder KPI-Auswertung findet nicht statt. Das Kalender-Icon für das Neuladen ist ausgeblendet; Aktualisierungen erfordern einen Seiten-Neuladen oder einen erneuten Ressourcenwechsel.",
+    "",
+    "Alle für die Darstellung benötigten Bibliotheken (`calendarJs`, `ICAL.js`) werden lokal aus `app/vendor` bzw. `dist` ausgeliefert; es werden keine externen Bibliotheksserver kontaktiert und keine Persistenz (keine Speicherung im Browser) verwendet. Netzwerkzugriffe erfolgen ausschließlich auf die konfigurierte CKAN-`package_show`-Quelle und die daraus gewählte ICS-Ressource – direkt oder über den ODAS-Proxy, abhängig vom Schalter `proxyAktiv`.",
+    "",
+    "## Datenquelle",
+    "",
+    "Die Termine werden über eine offene CKAN-API als ICS-Kalender bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
+    "",
+    "- **Open Data Portal:** [Open Data Musterstadt](https://open-data-musterstadt.ckan.de)",
+    "- **Datensatz:** [Termine](https://open-data-musterstadt.ckan.de/dataset/termine)",
+    "- **Ressource/API-Endpunkt:** [CKAN package_show](https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine) – Filter `format` enthält `ICS`",
+    "",
+    "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
+    "",
+    "## Open Data App",
+    "",
+    "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit Terminkalender-Daten anderer Kommunen konfigurieren.",
+    "",
+    "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
+    "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
+    "- [odas-app-terminkalender](https://github.com/open-data-apps/odas-app-terminkalender) – das Repository dieser App"
   ],
   "tags-funktion": [
     "Verwaltungsprozess"
@@ -83,10 +101,11 @@
       "default": [
         "_multiline_",
         "Sie sind zufrieden mit der App oder haben Anregungen, Verbesserungen oder Hinweise, die Sie uns mitteilen möchten?",
-        "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. ",
-        "Ihre Nachrichten können Sie uns mitteilen über:",
-        "Tel.: <a href='tel:{{odp.anbieter.telcode}}'>{{odp.anbieter.tel}}</a>",
-        "E-Mail: <a href='mailto:{{odp.anbieter.email}}'>{{odp.anbieter.email}}</a>"
+        "",
+        "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. Ihre Nachrichten können Sie uns mitteilen über:",
+        "",
+        "- Tel.: [{{odp.anbieter.tel}}](tel:{{odp.anbieter.telcode}})",
+        "- E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
       ],
       "erforderlich": "ja"
     },
@@ -99,19 +118,37 @@
       },
       "default": [
         "_multiline_",
-        "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich und aktuell.</p>",
-        "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine.</p>",
-        "<h3>Inhalte</h3>",
-        "<p>Die App verarbeitet Terminangaben aus einer konfigurierten Quelle und stellt Datum, Titel, Ort, Beschreibung und weitere verfügbare Felder dar.</p>",
-        "<h3>Nutzung</h3>",
-        "<p>Durchsuchen oder filtern Sie Termine und öffnen Sie Details zu einzelnen Einträgen. Die App zeigt die Angaben der Datenquelle; kurzfristige Änderungen sollten bei wichtigen Terminen zusätzlich über die zuständige Stelle geprüft werden.</p>",
-        "<h3>Für wen ist diese App?</h3>",
-        "<p>Die App richtet sich an Bürger:innen, Verwaltung, Veranstalter und Öffentlichkeitsarbeit, die Termine verständlich bereitstellen möchten. Besondere Datenkenntnisse sind für die Nutzung nicht erforderlich.</p>",
-        "<h3>Datenquelle</h3>",
-        "<p>Die Termine werden aus dem konfigurierten Open-Data-Datensatz geladen.</p>",
-        "<ul><li><strong>Open Data Portal:</strong> <a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><strong>Ressource/API-Endpunkt:</strong> <a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li></ul>",
-        "<h3>Open Data App Store</h3>",
-        "<p>Diese App ist für den Open Data App Store vorbereitet und kann mit Termin- und Veranstaltungskalendern anderer Kommunen betrieben werden.</p>"
+        "Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.",
+        "",
+        "Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine und hilft, Termine ohne Fachkenntnisse schnell zu finden.",
+        "",
+        "## Methodik",
+        "",
+        "Die App ruft die konfigurierte Datenquelle (`apiurl`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
+        "",
+        "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
+        "",
+        "Die Termine werden im Kalender (`calendarJs`, Sprache `de`) angezeigt; der Kalender bietet Monats-, Wochen- und Tagesansichten sowie eine eingebaute Suche und den Export der angezeigten Termine als ICS. Eigene Sortierungen, Kennzahlen, Karten oder automatische Aktualisierungen bietet die App nicht; einziger Filter auf App-Ebene ist der Ressourcen-Selektor. Liefert die CKAN-Antwort ein Änderungsdatum (`metadata_modified`), zeigt die App es als „Aktualisiert: TT.MM.JJJJ“ an. Verfügbarkeit und Aktualität der angezeigten Termine hängen vom Pflegestand der konfigurierten Quelle und der enthaltenen Ressourcen ab; eine Live-Garantie, Polling oder KPI-Auswertung findet nicht statt. Das Kalender-Icon für das Neuladen ist ausgeblendet; Aktualisierungen erfordern einen Seiten-Neuladen oder einen erneuten Ressourcenwechsel.",
+        "",
+        "Alle für die Darstellung benötigten Bibliotheken (`calendarJs`, `ICAL.js`) werden lokal aus `app/vendor` bzw. `dist` ausgeliefert; es werden keine externen Bibliotheksserver kontaktiert und keine Persistenz (keine Speicherung im Browser) verwendet. Netzwerkzugriffe erfolgen ausschließlich auf die konfigurierte CKAN-`package_show`-Quelle und die daraus gewählte ICS-Ressource – direkt oder über den ODAS-Proxy, abhängig vom Schalter `proxyAktiv`.",
+        "",
+        "## Datenquelle",
+        "",
+        "Die Termine werden über eine offene CKAN-API als ICS-Kalender bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
+        "",
+        "- **Open Data Portal:** [Open Data Musterstadt](https://open-data-musterstadt.ckan.de)",
+        "- **Datensatz:** [Termine](https://open-data-musterstadt.ckan.de/dataset/termine)",
+        "- **Ressource/API-Endpunkt:** [CKAN package_show](https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine) – Filter `format` enthält `ICS`",
+        "",
+        "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
+        "",
+        "## Open Data App",
+        "",
+        "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit Terminkalender-Daten anderer Kommunen konfigurieren.",
+        "",
+        "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
+        "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
+        "- [odas-app-terminkalender](https://github.com/open-data-apps/odas-app-terminkalender) – das Repository dieser App"
       ],
       "erforderlich": "ja"
     },
@@ -124,14 +161,25 @@
       },
       "default": [
         "_multiline_",
-        "<h4>Anbieter</h4>",
-        "<p>{{{odp.anbieter.orgName}}}<br>{{{odp.anbieter.orgUnit}}}</p>",
-        "<p>{{odp.anbieter.strasse}}<br>{{odp.anbieter.plzort}}</p>",
-        "<p>Website: <a href='{{odp.anbieter.url-extern}}' target='_blank'>{{odp.anbieter.url-extern}}</a></p>",
-        "<h4>Ansprechpartner</h4>",
-        "<p>{{odp.anbieter.kontakt-bezeichnung}}<br>{{odp.anbieter.name}}</p>",
-        "<h4>Kontakt</h4>",
-        "<p>Tel.: {{odp.anbieter.tel}}<br>E-Mail: <a href='mailto:{{odp.anbieter.email}}'>{{odp.anbieter.email}}</a></p>"
+        "## Anbieter",
+        "",
+        "{{{odp.anbieter.orgName}}}  ",
+        "{{{odp.anbieter.orgUnit}}}",
+        "",
+        "{{odp.anbieter.strasse}}  ",
+        "{{odp.anbieter.plzort}}",
+        "",
+        "Website: [{{odp.anbieter.url-extern}}]({{odp.anbieter.url-extern}})",
+        "",
+        "## Ansprechpartner",
+        "",
+        "{{odp.anbieter.kontakt-bezeichnung}}  ",
+        "{{odp.anbieter.name}}",
+        "",
+        "## Kontakt",
+        "",
+        "Tel.: {{odp.anbieter.tel}}  ",
+        "E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
       ],
       "erforderlich": "ja"
     },
@@ -144,9 +192,11 @@
       },
       "default": [
         "_multiline_",
-        "<p>Diese App verarbeitet die angezeigten offenen Daten ausschließlich im Browser. Es werden keine Cookies gesetzt, keine Nutzungsstatistiken erhoben und keine Daten im Browser gespeichert.</p>",
-        "<p>Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.</p>",
-        "<p>Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter <code>proxyAktiv</code> der Instanz-Konfiguration.</p>"
+        "Diese App verarbeitet die angezeigten offenen Daten ausschließlich im Browser. Es werden keine Cookies gesetzt, keine Nutzungsstatistiken erhoben und keine Daten im Browser gespeichert.",
+        "",
+        "Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.",
+        "",
+        "Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter `proxyAktiv` der Instanz-Konfiguration."
       ],
       "erforderlich": "ja"
     },
@@ -229,7 +279,7 @@
       "format": {
         "typ": "markdown"
       },
-      "default": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",
+      "default": "- [{{odp.name}}]({{odp.url}})\n- [Konfigurierter Terminkalender-Endpunkt]({{appconfig.datensatz-apiurl}})\n- [Open Data App Store](https://open-data-app-store.de)",
       "erforderlich": "nein"
     },
     "datenquelleHinweis": {
@@ -239,7 +289,7 @@
       "format": {
         "typ": "markdown"
       },
-      "default": "<p>Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.</p>",
+      "default": "Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.",
       "erforderlich": "nein"
     },
     "brandingCSS": {
@@ -266,7 +316,7 @@
     }
   },
   "daten": {
-    "beschreibung": "Die Terminkalender-App verarbeitet konfigurierbare Open-Data-Ressourcen aus dem Open Data Portal (z.B. JSON- oder CSV-Endpunkte).",
+    "beschreibung": "Die Terminkalender-App lädt Terminressourcen aus einem CKAN-Datensatz über die package_show-JSON-API und verarbeitet enthaltene ICS-Kalenderdateien.",
     "schema": "assets/schema.json",
     "beispiel": "",
     "beispiel-url": ""

@@ -1,6 +1,9 @@
 # Changelog
 
 
+## 1.24.0 - 2026-08-20
+- Markdown-Metadaten: Paketbeschreibungen auf echtes Markdown umgestellt, exakte Identität Top-Level/Instanz hergestellt, lokale HTML-Fixture semantisch gespiegelt.
+
 ## 1.23.0 - 2026-08-20
 - FIX: `onPageLeave(page)` ergänzt und über `tkCleanups`-Map registriert (das CHANGELOG behauptete dies bereits bei der F-42-Welle, ohne dass es tatsächlich implementiert wurde); zusätzlich der bestehende Latest-Load-Token-Mechanismus um einen `disposed`-Check ergänzt (F-74)
 
