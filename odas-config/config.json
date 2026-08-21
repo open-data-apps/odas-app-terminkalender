@@ -9,7 +9,7 @@
     "<p>Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.</p>",
     "<p>Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine und hilft, Termine ohne Fachkenntnisse schnell zu finden.</p>",
     "<h2>Methodik</h2>",
-    "<p>Die App ruft die konfigurierte Datenquelle (<code>apiurl</code>) – im Live-Betrieb optional über den ODAS-Proxy (<code>proxyAktiv</code>) – als CKAN-<code>package_show</code>-JSON ab und behält nur Ressourcen, deren Feld <code>format</code> den Teilstring <code>ICS</code> enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.</p>",
+    "<p>Die App ruft die konfigurierte Datenquelle (<code>apiurls.termine</code>) – im Live-Betrieb optional über den ODAS-Proxy (<code>proxyAktiv</code>) – als CKAN-<code>package_show</code>-JSON ab und behält nur Ressourcen, deren Feld <code>format</code> den Teilstring <code>ICS</code> enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.</p>",
     "<p>Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (<code>fetchOdasResource</code> direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (<code>ICAL.parse</code>, <code>ICAL.Component</code>, <code>getAllSubcomponents(\"vevent\")</code>, <code>ICAL.Event</code>) zu Kalenderereignissen mit <code>from</code>/<code>to</code>, Titel (<code>summary</code>) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (<code>predefinedColors</code>) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (<code>RRULE</code>) werden nicht expandiert, Felder wie <code>LOCATION</code>, <code>CATEGORY</code> oder <code>UID</code> werden nicht angezeigt.</p>",
     "<p>Die Termine werden im Kalender (<code>calendarJs</code>, Sprache <code>de</code>) angezeigt; der Kalender bietet Monats-, Wochen- und Tagesansichten sowie eine eingebaute Suche und den Export der angezeigten Termine als ICS. Eigene Sortierungen, Kennzahlen, Karten oder automatische Aktualisierungen bietet die App nicht; einziger Filter auf App-Ebene ist der Ressourcen-Selektor. Liefert die CKAN-Antwort ein Änderungsdatum (<code>metadata_modified</code>), zeigt die App es als „Aktualisiert: TT.MM.JJJJ“ an. Verfügbarkeit und Aktualität der angezeigten Termine hängen vom Pflegestand der konfigurierten Quelle und der enthaltenen Ressourcen ab; eine Live-Garantie, Polling oder KPI-Auswertung findet nicht statt. Das Kalender-Icon für das Neuladen ist ausgeblendet; Aktualisierungen erfordern einen Seiten-Neuladen oder einen erneuten Ressourcenwechsel.</p>",
     "<p>Alle für die Darstellung benötigten Bibliotheken (<code>calendarJs</code>, <code>ICAL.js</code>) werden lokal aus <code>app/vendor</code> bzw. <code>dist</code> ausgeliefert; es werden keine externen Bibliotheksserver kontaktiert und keine Persistenz (keine Speicherung im Browser) verwendet. Netzwerkzugriffe erfolgen ausschließlich auf die konfigurierte CKAN-<code>package_show</code>-Quelle und die daraus gewählte ICS-Ressource – direkt oder über den ODAS-Proxy, abhängig vom Schalter <code>proxyAktiv</code>.</p>",
@@ -30,7 +30,13 @@
   ],
   "urlDaten": "https://open-data-musterstadt.ckan.de/dataset/termine",
   "fusszeile": "(C) Copyright 2024 | Inhalt: Stadt Esslingen | App: Ondics GmbH | Provided by: Ondics GmbH",
-  "apiurl": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
+  "apiurls": [
+    {
+      "name": "termine",
+      "label": "URL zu den Daten",
+      "url": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine"
+    }
+  ],
   "sprache": "de",
   "datenStand": "Stand: abhängig vom konfigurierten Terminkalender",
   "weiterfuehrendeLinks": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",

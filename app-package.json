@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "version": "1.24.0",
+  "version": "1.25.0",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
   "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert öffentliche Termine übersichtlich im Kalender.",
@@ -15,7 +15,7 @@
     "",
     "## Methodik",
     "",
-    "Die App ruft die konfigurierte Datenquelle (`apiurl`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
+    "Die App ruft die konfigurierte Datenquelle (`apiurls.termine`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
     "",
     "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
     "",
@@ -124,7 +124,7 @@
         "",
         "## Methodik",
         "",
-        "Die App ruft die konfigurierte Datenquelle (`apiurl`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
+        "Die App ruft die konfigurierte Datenquelle (`apiurls.termine`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
         "",
         "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
         "",
@@ -225,17 +225,24 @@
       },
       "erforderlich": "ja"
     },
-    "apiurl": {
-      "label": "URL zu den Daten",
+    "apiurls": {
+      "label": "URLs zu Datenressourcen",
       "category": "datenherkunft",
-      "hilfe": "Direkter, maschinenlesbarer Endpunkt, von dem die App die Ressourcen lädt — nicht die Datensatzseite im ODP (siehe „URL zum Datensatz im ODP\").",
+      "hilfe": "Direkter Download-, Datei- oder API-Endpunkt der tatsächlich verwendeten Datenquelle(n). Mehrere Einträge möglich.",
+      "typ": "array",
       "format": {
         "typ": "url",
-        "laenge": 255
+        "laenge": 500
       },
-      "default": "{{appconfig.datensatz-apiurl}}",
-      "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
-      "erforderlich": "ja"
+      "urls": [
+        {
+          "name": "termine",
+          "label": "URL zu den Daten",
+          "default": "{{appconfig.datensatz-apiurl}}",
+          "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
+          "erforderlich": "ja"
+        }
+      ]
     },
     "sprache": {
       "label": "Sprache der App",
