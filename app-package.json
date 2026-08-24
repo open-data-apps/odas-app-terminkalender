@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "app-version": "1.26.0",
+  "app-version": "1.27.0",
   "app-package-version": "2",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
@@ -57,6 +57,7 @@
     "assets/Mobile_Screenshot.png"
   ],
   "branding-css": "",
+  "api-version": "1",
   "instanz-config": {
     "seitentitel": {
       "label": "Seitentitel",
@@ -328,6 +329,5 @@
     "schema": "assets/schema.json",
     "beispiel": "",
     "beispiel-url": ""
-  },
-  "api-version": "1"
+  }
 }
