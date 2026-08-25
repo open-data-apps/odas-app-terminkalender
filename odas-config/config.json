@@ -39,6 +39,6 @@
   ],
   "sprache": "de",
   "datenStand": "Stand: abhängig vom konfigurierten Terminkalender",
-  "weiterfuehrendeLinks": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{appconfig.datensatz-apiurl}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",
+  "weiterfuehrendeLinks": "<ul><li><a href=\"{{odp.url}}\" target=\"_blank\" rel=\"noopener\">{{odp.name}}</a></li><li><a href=\"{{{appinstanz.apiurls.1}}}\" target=\"_blank\" rel=\"noopener\">Konfigurierter Terminkalender-Endpunkt</a></li><li><a href=\"https://open-data-app-store.de\" target=\"_blank\" rel=\"noopener\">Open Data App Store</a></li></ul>",
   "datenquelleHinweis": "<p>Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.</p>"
 }

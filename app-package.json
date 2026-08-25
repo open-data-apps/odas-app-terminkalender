@@ -240,7 +240,7 @@
         {
           "name": "termine",
           "label": "URL zu den Daten",
-          "default": "{{appconfig.datensatz-apiurl}}",
+          "default": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
           "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
           "erforderlich": "ja"
         }
@@ -266,7 +266,7 @@
       "format": {
         "typ": "url"
       },
-      "default": "{{appconfig.datensatz-url}}",
+      "default": "https://open-data-musterstadt.ckan.de/dataset/termine",
       "beispiel": "https://open-data-musterstadt.ckan.de/dataset/termine",
       "erforderlich": "ja"
     },
@@ -288,7 +288,7 @@
       "format": {
         "typ": "markdown"
       },
-      "default": "- [{{odp.name}}]({{odp.url}})\n- [Konfigurierter Terminkalender-Endpunkt]({{appconfig.datensatz-apiurl}})\n- [Open Data App Store](https://open-data-app-store.de)",
+      "default": "- [{{odp.name}}]({{odp.url}})\n- [Konfigurierter Terminkalender-Endpunkt]({{{appinstanz.apiurls.1}}})\n- [Open Data App Store](https://open-data-app-store.de)",
       "erforderlich": "nein"
     },
     "datenquelleHinweis": {
