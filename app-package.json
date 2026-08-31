@@ -1,124 +1,14 @@
 {
-  "app-entwickler-id": "12343",
-  "app-entwickler-name": "ondics-gmbh",
-  "name-in-url": "Terminkalender",
-  "name": "Terminkalender",
-  "app-version": "1.29.0",
-  "app-package-version": "2",
-  "odas-app-icon": "assets/odas-app-icon.svg",
-  "app-icon": "assets/odas-app-icon.svg",
-  "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert öffentliche Termine übersichtlich im Kalender.",
-  "beschreibung": [
-    "_multiline_",
-    "Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.",
-    "",
-    "Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine und hilft, Termine ohne Fachkenntnisse schnell zu finden.",
-    "",
-    "## Methodik",
-    "",
-    "Die App ruft die konfigurierte Datenquelle (`apiurls.termine`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
-    "",
-    "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
-    "",
-    "Die Termine werden im Kalender (`calendarJs`, Sprache `de`) angezeigt; der Kalender bietet Monats-, Wochen- und Tagesansichten sowie eine eingebaute Suche und den Export der angezeigten Termine als ICS. Eigene Sortierungen, Kennzahlen, Karten oder automatische Aktualisierungen bietet die App nicht; einziger Filter auf App-Ebene ist der Ressourcen-Selektor. Liefert die CKAN-Antwort ein Änderungsdatum (`metadata_modified`), zeigt die App es als „Aktualisiert: TT.MM.JJJJ“ an. Verfügbarkeit und Aktualität der angezeigten Termine hängen vom Pflegestand der konfigurierten Quelle und der enthaltenen Ressourcen ab; eine Live-Garantie, Polling oder KPI-Auswertung findet nicht statt. Das Kalender-Icon für das Neuladen ist ausgeblendet; Aktualisierungen erfordern einen Seiten-Neuladen oder einen erneuten Ressourcenwechsel.",
-    "",
-    "Alle für die Darstellung benötigten Bibliotheken (`calendarJs`, `ICAL.js`) werden lokal aus `app/vendor` bzw. `dist` ausgeliefert; es werden keine externen Bibliotheksserver kontaktiert und keine Persistenz (keine Speicherung im Browser) verwendet. Netzwerkzugriffe erfolgen ausschließlich auf die konfigurierte CKAN-`package_show`-Quelle und die daraus gewählte ICS-Ressource – direkt oder über den ODAS-Proxy, abhängig vom Schalter `proxyAktiv`.",
-    "",
-    "## Datenquelle",
-    "",
-    "Die Termine werden über eine offene CKAN-API als ICS-Kalender bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
-    "",
-    "- **Open Data Portal:** [Open Data Musterstadt](https://open-data-musterstadt.ckan.de)",
-    "- **Datensatz:** [Termine]({{{appinstanz.urlDaten}}})",
-    "- **Ressource/API-Endpunkt:** [CKAN package_show](https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine) – Filter `format` enthält `ICS`",
-    "",
-    "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
-    "",
-    "## Open Data App",
-    "",
-    "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit Terminkalender-Daten anderer Kommunen konfigurieren.",
-    "",
-    "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
-    "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
-    "- [odas-app-terminkalender](https://github.com/open-data-apps/odas-app-terminkalender) – das Repository dieser App"
-  ],
-  "tags-funktion": [
-    "Verwaltungsprozess"
-  ],
-  "tags-dateityp": [
-    "ICS"
-  ],
-  "tags-datenart": [
-    "Termine",
-    "Kalender"
-  ],
-  "screenshots": [
-    "assets/Desktop_Screenshot.png",
-    "assets/Mobile_Screenshot.png"
-  ],
-  "branding-css": "",
-  "api-version": "1",
-  "instanz-config": {
-    "seitentitel": {
-      "label": "Seitentitel",
-      "category": "allgemein",
-      "hilfe": "Der Seitentitel wird im Browser-Tab der App angezeigt",
-      "default": "Terminkalender",
-      "format": {
-        "typ": "string",
-        "laenge": 50
-      },
-      "erforderlich": "ja"
-    },
-    "titel": {
-      "label": "Titel",
-      "category": "allgemein",
-      "hilfe": "Der Titel wird in der Titelzeile der App angezeigt",
-      "default": "Terminkalender",
-      "format": {
-        "typ": "string",
-        "laenge": 50
-      },
-      "erforderlich": "ja"
-    },
-    "icon": {
-      "label": "App-Icon",
-      "category": "allgemein",
-      "hilfe": "Das Icon wird links oben in der Titelzeile angezeigt",
-      "default": "{{{odp.logo}}}",
-      "format": {
-        "typ": "image",
-        "hoehe": 100,
-        "breite": 300
-      },
-      "erforderlich": "ja"
-    },
-    "kontakt": {
-      "label": "Kontakt",
-      "category": "kontakt-rechtliches",
-      "hilfe": "Der Text wird im Menüpunkt 'Kontakt' anzeigt",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": [
-        "_multiline_",
-        "Sie sind zufrieden mit der App oder haben Anregungen, Verbesserungen oder Hinweise, die Sie uns mitteilen möchten?",
-        "",
-        "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. Ihre Nachrichten können Sie uns mitteilen über:",
-        "",
-        "- Tel.: [{{odp.anbieter.tel}}](tel:{{odp.anbieter.tel}})",
-        "- E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
-      ],
-      "erforderlich": "ja"
-    },
-    "beschreibung": {
-      "label": "Beschreibung",
-      "category": "beschreibung",
-      "hilfe": "Der Text wird im Menüpunkt 'Über diese App' anzeigt",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": [
+    "app-entwickler-id": "12343",
+    "app-entwickler-name": "ondics-gmbh",
+    "name-in-url": "Terminkalender",
+    "name": "Terminkalender",
+    "app-version": "1.29.0",
+    "app-package-version": "2",
+    "odas-app-icon": "assets/odas-app-icon.svg",
+    "app-icon": "assets/odas-app-icon.svg",
+    "kurzbeschreibung": "Von Bürgerbeteiligung bis Wochenmarkt – diese App präsentiert öffentliche Termine übersichtlich im Kalender.",
+    "beschreibung": [
         "_multiline_",
         "Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.",
         "",
@@ -140,7 +30,7 @@
         "",
         "- **Open Data Portal:** [Open Data Musterstadt](https://open-data-musterstadt.ckan.de)",
         "- **Datensatz:** [Termine]({{{appinstanz.urlDaten}}})",
-        "- **Ressource/API-Endpunkt:** [CKAN package_show](https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine) – Filter `format` enthält `ICS`",
+        "- **Ressource/API-Endpunkt:** [CKAN package_show]({{{appinstanz.apiurls.1}}}) – Filter `format` enthält `ICS`",
         "",
         "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
         "",
@@ -151,183 +41,293 @@
         "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
         "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
         "- [odas-app-terminkalender](https://github.com/open-data-apps/odas-app-terminkalender) – das Repository dieser App"
-      ],
-      "erforderlich": "ja"
-    },
-    "impressum": {
-      "label": "Impressum",
-      "category": "kontakt-rechtliches",
-      "hilfe": "Der Text wird im Menüpunkt 'Impressum' anzeigt",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": [
-        "_multiline_",
-        "## Anbieter",
-        "",
-        "{{{odp.anbieter.orgName}}}  ",
-        "{{{odp.anbieter.orgUnit}}}",
-        "",
-        "{{odp.anbieter.strasse}}  ",
-        "{{odp.anbieter.plzort}}",
-        "",
-        "Website: [{{odp.anbieter.url}}]({{odp.anbieter.url}})",
-        "",
-        "## Ansprechpartner",
-        "",
-        "{{odp.anbieter.kontakt-bezeichnung}}  ",
-        "{{odp.anbieter.name}}",
-        "",
-        "## Kontakt",
-        "",
-        "Tel.: {{odp.anbieter.tel}}  ",
-        "E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
-      ],
-      "erforderlich": "ja"
-    },
-    "datenschutz": {
-      "label": "Datenschutz",
-      "category": "kontakt-rechtliches",
-      "hilfe": "Der Text wird im Menüpunkt 'Datenschutz' anzeigt",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": [
-        "_multiline_",
-        "Diese App verarbeitet die angezeigten offenen Daten ausschließlich im Browser. Es werden keine Cookies gesetzt, keine Nutzungsstatistiken erhoben und keine Daten im Browser gespeichert.",
-        "",
-        "Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.",
-        "",
-        "Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter `proxyAktiv` der Instanz-Konfiguration."
-      ],
-      "erforderlich": "ja"
-    },
-    "fusszeile": {
-      "label": "Fußzeile",
-      "category": "kontakt-rechtliches",
-      "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
-      "format": {
-        "typ": "string",
-        "laenge": 50
-      },
-      "default": "(C) Copyright {{jahr}} | App & Daten: {{odp.anbieter.name}} | App-Entwickler: {{app.developer.name}} | ODAS: {{odas.betreiber.name}}",
-      "erforderlich": "ja"
-    },
-    "proxyAktiv": {
-      "label": "ODAS-Proxy aktivieren",
-      "category": "datenherkunft",
-      "hilfe": "Mit ja werden Datenabrufe über den ODAS-Proxy gesendet. Der Proxy ist nur im ODAS-Live-System verfügbar; Entwicklung und Standalone verwenden nein.",
-      "default": "nein",
-      "format": {
-        "typ": "dropdown",
-        "optionen": [
-          "nein",
-          "ja"
-        ]
-      },
-      "erforderlich": "ja"
-    },
-    "apiurls": {
-      "label": "URLs zu Datenressourcen",
-      "category": "datenherkunft",
-      "hilfe": "Direkter Download-, Datei- oder API-Endpunkt der tatsächlich verwendeten Datenquelle(n). Mehrere Einträge möglich.",
-      "typ": "array",
-      "format": {
-        "typ": "url",
-        "laenge": 500
-      },
-      "urls": [
-        {
-          "name": "termine",
-          "label": "URL zu den Daten",
-          "default": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
-          "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
-          "erforderlich": "ja"
+    ],
+    "tags-funktion": [
+        "Verwaltungsprozess"
+    ],
+    "tags-dateityp": [
+        "ICS"
+    ],
+    "tags-datenart": [
+        "Termine",
+        "Kalender"
+    ],
+    "screenshots": [
+        "assets/Desktop_Screenshot.png",
+        "assets/Mobile_Screenshot.png"
+    ],
+    "branding-css": "",
+    "api-version": "1",
+    "instanz-config": {
+        "seitentitel": {
+            "label": "Seitentitel",
+            "category": "allgemein",
+            "hilfe": "Der Seitentitel wird im Browser-Tab der App angezeigt",
+            "default": "Terminkalender",
+            "format": {
+                "typ": "string",
+                "laenge": 50
+            },
+            "erforderlich": "ja"
+        },
+        "titel": {
+            "label": "Titel",
+            "category": "allgemein",
+            "hilfe": "Der Titel wird in der Titelzeile der App angezeigt",
+            "default": "Terminkalender",
+            "format": {
+                "typ": "string",
+                "laenge": 50
+            },
+            "erforderlich": "ja"
+        },
+        "icon": {
+            "label": "App-Icon",
+            "category": "allgemein",
+            "hilfe": "Das Icon wird links oben in der Titelzeile angezeigt",
+            "default": "{{{odp.logo}}}",
+            "format": {
+                "typ": "image",
+                "hoehe": 100,
+                "breite": 300
+            },
+            "erforderlich": "ja"
+        },
+        "kontakt": {
+            "label": "Kontakt",
+            "category": "kontakt-rechtliches",
+            "hilfe": "Der Text wird im Menüpunkt 'Kontakt' anzeigt",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": [
+                "_multiline_",
+                "Sie sind zufrieden mit der App oder haben Anregungen, Verbesserungen oder Hinweise, die Sie uns mitteilen möchten?",
+                "",
+                "Dann richten Sie sich gerne an uns. Wir freuen uns über alle Nachrichten. Ihre Nachrichten können Sie uns mitteilen über:",
+                "",
+                "- Tel.: [{{odp.anbieter.tel}}](tel:{{odp.anbieter.tel}})",
+                "- E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
+            ],
+            "erforderlich": "ja"
+        },
+        "beschreibung": {
+            "label": "Beschreibung",
+            "category": "beschreibung",
+            "hilfe": "Der Text wird im Menüpunkt 'Über diese App' anzeigt",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": [
+                "_multiline_",
+                "Die Terminkalender-App präsentiert öffentliche Termine übersichtlich im Kalender.",
+                "",
+                "Sie eignet sich für Veranstaltungen, Bürgerbeteiligungen, Sitzungen, Märkte oder andere kommunale Termine und hilft, Termine ohne Fachkenntnisse schnell zu finden.",
+                "",
+                "## Methodik",
+                "",
+                "Die App ruft die konfigurierte Datenquelle (`apiurls.termine`) – im Live-Betrieb optional über den ODAS-Proxy (`proxyAktiv`) – als CKAN-`package_show`-JSON ab und behält nur Ressourcen, deren Feld `format` den Teilstring `ICS` enthält (Groß-/Kleinschreibung ignoriert). Für jede gefundene Ressource wird ein Eintrag im Dropdown angelegt; die Liste bildet die im Datensatz vorhandenen Kalender ab.",
+                "",
+                "Beim Wechsel des Dropdowns lädt die App die gewählte Ressource als rohe ICS-Datei (`fetchOdasResource` direkt oder über den Proxy) und parst sie im Browser mit ICAL.js (`ICAL.parse`, `ICAL.Component`, `getAllSubcomponents(\"vevent\")`, `ICAL.Event`) zu Kalenderereignissen mit `from`/`to`, Titel (`summary`) und Beschreibung. Fehlt ein Titel, wird „Kein Titel“ verwendet, fehlt eine Beschreibung „Keine Beschreibung verfügbar“. Die Farbe eines Termins wird deterministisch aus dem Titel über eine Zeichen-Prüfsumme auf eine feste Farbpalette (`predefinedColors`) abgebildet; gleichnamige Termine erhalten dieselbe Farbe. Wiederholungsregeln (`RRULE`) werden nicht expandiert, Felder wie `LOCATION`, `CATEGORY` oder `UID` werden nicht angezeigt.",
+                "",
+                "Die Termine werden im Kalender (`calendarJs`, Sprache `de`) angezeigt; der Kalender bietet Monats-, Wochen- und Tagesansichten sowie eine eingebaute Suche und den Export der angezeigten Termine als ICS. Eigene Sortierungen, Kennzahlen, Karten oder automatische Aktualisierungen bietet die App nicht; einziger Filter auf App-Ebene ist der Ressourcen-Selektor. Liefert die CKAN-Antwort ein Änderungsdatum (`metadata_modified`), zeigt die App es als „Aktualisiert: TT.MM.JJJJ“ an. Verfügbarkeit und Aktualität der angezeigten Termine hängen vom Pflegestand der konfigurierten Quelle und der enthaltenen Ressourcen ab; eine Live-Garantie, Polling oder KPI-Auswertung findet nicht statt. Das Kalender-Icon für das Neuladen ist ausgeblendet; Aktualisierungen erfordern einen Seiten-Neuladen oder einen erneuten Ressourcenwechsel.",
+                "",
+                "Alle für die Darstellung benötigten Bibliotheken (`calendarJs`, `ICAL.js`) werden lokal aus `app/vendor` bzw. `dist` ausgeliefert; es werden keine externen Bibliotheksserver kontaktiert und keine Persistenz (keine Speicherung im Browser) verwendet. Netzwerkzugriffe erfolgen ausschließlich auf die konfigurierte CKAN-`package_show`-Quelle und die daraus gewählte ICS-Ressource – direkt oder über den ODAS-Proxy, abhängig vom Schalter `proxyAktiv`.",
+                "",
+                "## Datenquelle",
+                "",
+                "Die Termine werden über eine offene CKAN-API als ICS-Kalender bereitgestellt; die konkrete Ressource wird über die App-Konfiguration festgelegt.",
+                "",
+                "- **Open Data Portal:** [Open Data Musterstadt](https://open-data-musterstadt.ckan.de)",
+                "- **Datensatz:** [Termine]({{{appinstanz.urlDaten}}})",
+                "- **Ressource/API-Endpunkt:** [CKAN package_show]({{{appinstanz.apiurls.1}}}) – Filter `format` enthält `ICS`",
+                "",
+                "Angezeigt werden die in der Quelle vorhandenen Termine; Verfügbarkeit und Aktualität hängen vom Pflegestand der Quelle ab.",
+                "",
+                "## Open Data App",
+                "",
+                "Diese App ist eine Open Data App und kann im [Open Data App Store](https://open-data-app-store.de/) betrieben werden. Sie ist Open Source und lässt sich mit Terminkalender-Daten anderer Kommunen konfigurieren.",
+                "",
+                "- [Open Data App Store](https://open-data-app-store.de/) – die Plattform für Open Data Apps",
+                "- [Alle Open Data Apps auf GitHub](https://github.com/open-data-apps) – die Organisation mit allen Apps",
+                "- [odas-app-terminkalender](https://github.com/open-data-apps/odas-app-terminkalender) – das Repository dieser App"
+            ],
+            "erforderlich": "ja"
+        },
+        "impressum": {
+            "label": "Impressum",
+            "category": "kontakt-rechtliches",
+            "hilfe": "Der Text wird im Menüpunkt 'Impressum' anzeigt",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": [
+                "_multiline_",
+                "## Anbieter",
+                "",
+                "{{{odp.anbieter.orgName}}}  ",
+                "{{{odp.anbieter.orgUnit}}}",
+                "",
+                "{{odp.anbieter.strasse}}  ",
+                "{{odp.anbieter.plzort}}",
+                "",
+                "Website: [{{odp.anbieter.url}}]({{odp.anbieter.url}})",
+                "",
+                "## Ansprechpartner",
+                "",
+                "{{odp.anbieter.kontakt-bezeichnung}}  ",
+                "{{odp.anbieter.name}}",
+                "",
+                "## Kontakt",
+                "",
+                "Tel.: {{odp.anbieter.tel}}  ",
+                "E-Mail: [{{odp.anbieter.email}}](mailto:{{odp.anbieter.email}})"
+            ],
+            "erforderlich": "ja"
+        },
+        "datenschutz": {
+            "label": "Datenschutz",
+            "category": "kontakt-rechtliches",
+            "hilfe": "Der Text wird im Menüpunkt 'Datenschutz' anzeigt",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": [
+                "_multiline_",
+                "Diese App verarbeitet die angezeigten offenen Daten ausschließlich im Browser. Es werden keine Cookies gesetzt, keine Nutzungsstatistiken erhoben und keine Daten im Browser gespeichert.",
+                "",
+                "Alle für die Darstellung benötigten Programmbibliotheken werden mit der App ausgeliefert. Beim Aufruf werden dafür keine externen Server kontaktiert.",
+                "",
+                "Die angezeigten Daten werden vom Browser direkt aus der konfigurierten Datenquelle geladen. Dabei werden technisch bedingt IP-Adresse und Browserkennung an deren Betreiber übermittelt. Maßgeblich ist der Schalter `proxyAktiv` der Instanz-Konfiguration."
+            ],
+            "erforderlich": "ja"
+        },
+        "fusszeile": {
+            "label": "Fußzeile",
+            "category": "kontakt-rechtliches",
+            "hilfe": "Wird auf der Website unten in der Fusszeile angezeigt.",
+            "format": {
+                "typ": "string",
+                "laenge": 50
+            },
+            "default": "(C) Copyright {{jahr}} | App & Daten: {{odp.anbieter.name}} | App-Entwickler: {{app.developer.name}} | ODAS: {{odas.betreiber.name}}",
+            "erforderlich": "ja"
+        },
+        "proxyAktiv": {
+            "label": "ODAS-Proxy aktivieren",
+            "category": "datenherkunft",
+            "hilfe": "Mit ja werden Datenabrufe über den ODAS-Proxy gesendet. Der Proxy ist nur im ODAS-Live-System verfügbar; Entwicklung und Standalone verwenden nein.",
+            "default": "nein",
+            "format": {
+                "typ": "dropdown",
+                "optionen": [
+                    "nein",
+                    "ja"
+                ]
+            },
+            "erforderlich": "ja"
+        },
+        "apiurls": {
+            "label": "URLs zu Datenressourcen",
+            "category": "datenherkunft",
+            "hilfe": "Direkter Download-, Datei- oder API-Endpunkt der tatsächlich verwendeten Datenquelle(n). Mehrere Einträge möglich.",
+            "typ": "array",
+            "format": {
+                "typ": "url",
+                "laenge": 500
+            },
+            "urls": [
+                {
+                    "name": "termine",
+                    "label": "URL zu den Daten",
+                    "default": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
+                    "beispiel": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine",
+                    "erforderlich": "ja"
+                }
+            ]
+        },
+        "sprache": {
+            "label": "Sprache der App",
+            "category": "allgemein",
+            "hilfe": "Angabe der App-Sprache",
+            "default": "de",
+            "format": {
+                "typ": "dropdown",
+                "optionen": [
+                    "de"
+                ]
+            },
+            "erforderlich": "ja"
+        },
+        "urlDaten": {
+            "label": "URL zum Datensatz im ODP",
+            "category": "datenherkunft",
+            "hilfe": "Der Datensatz im Open Data Portal mit den Daten der Terminkalender App",
+            "format": {
+                "typ": "url"
+            },
+            "default": "https://open-data-musterstadt.ckan.de/dataset/termine",
+            "beispiel": "https://open-data-musterstadt.ckan.de/dataset/termine",
+            "erforderlich": "ja"
+        },
+        "datenStand": {
+            "label": "Datenstand",
+            "category": "beschreibung",
+            "hilfe": "Freitext-Datum, z.B. 'Stand: Januar 2025'. Leer = ausgeblendet.",
+            "format": {
+                "typ": "string",
+                "laenge": 60
+            },
+            "default": "Stand: abhängig vom konfigurierten Terminkalender",
+            "erforderlich": "nein"
+        },
+        "weiterfuehrendeLinks": {
+            "label": "Weiterführende Links",
+            "category": "beschreibung",
+            "hilfe": "Verwandte Datensätze / Hintergrundquellen (Markdown/HTML). Leer = ausgeblendet.",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": "- [{{odp.name}}]({{odp.url}})\n- [Konfigurierter Terminkalender-Endpunkt]({{{appinstanz.apiurls.1}}})\n- [Open Data App Store](https://open-data-app-store.de)",
+            "erforderlich": "nein"
+        },
+        "datenquelleHinweis": {
+            "label": "Methodik / Datenquelle-Hinweis",
+            "category": "beschreibung",
+            "hilfe": "Herkunft, Erhebungsmethode und Limitierungen (HTML/Markdown). Leer = ausgeblendet.",
+            "format": {
+                "typ": "markdown"
+            },
+            "default": "Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.",
+            "erforderlich": "nein"
+        },
+        "brandingCSS": {
+            "label": "Zusätzliches Branding-CSS",
+            "category": "sonstiges",
+            "hilfe": "Optionaler CSS-Code für die konkrete App-Instanz.",
+            "default": "",
+            "format": {
+                "typ": "string",
+                "laenge": 10000
+            },
+            "erforderlich": "nein"
+        },
+        "brandingCSSFile": {
+            "label": "Branding-CSS-Datei",
+            "category": "sonstiges",
+            "hilfe": "Optionale URL zu einer zusätzlichen CSS-Datei für die konkrete App-Instanz.",
+            "default": "",
+            "format": {
+                "typ": "url",
+                "laenge": 500
+            },
+            "erforderlich": "nein"
         }
-      ]
     },
-    "sprache": {
-      "label": "Sprache der App",
-      "category": "allgemein",
-      "hilfe": "Angabe der App-Sprache",
-      "default": "de",
-      "format": {
-        "typ": "dropdown",
-        "optionen": [
-          "de"
-        ]
-      },
-      "erforderlich": "ja"
-    },
-    "urlDaten": {
-      "label": "URL zum Datensatz im ODP",
-      "category": "datenherkunft",
-      "hilfe": "Der Datensatz im Open Data Portal mit den Daten der Terminkalender App",
-      "format": {
-        "typ": "url"
-      },
-      "default": "https://open-data-musterstadt.ckan.de/dataset/termine",
-      "beispiel": "https://open-data-musterstadt.ckan.de/dataset/termine",
-      "erforderlich": "ja"
-    },
-    "datenStand": {
-      "label": "Datenstand",
-      "category": "beschreibung",
-      "hilfe": "Freitext-Datum, z.B. 'Stand: Januar 2025'. Leer = ausgeblendet.",
-      "format": {
-        "typ": "string",
-        "laenge": 60
-      },
-      "default": "Stand: abhängig vom konfigurierten Terminkalender",
-      "erforderlich": "nein"
-    },
-    "weiterfuehrendeLinks": {
-      "label": "Weiterführende Links",
-      "category": "beschreibung",
-      "hilfe": "Verwandte Datensätze / Hintergrundquellen (Markdown/HTML). Leer = ausgeblendet.",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": "- [{{odp.name}}]({{odp.url}})\n- [Konfigurierter Terminkalender-Endpunkt]({{{appinstanz.apiurls.1}}})\n- [Open Data App Store](https://open-data-app-store.de)",
-      "erforderlich": "nein"
-    },
-    "datenquelleHinweis": {
-      "label": "Methodik / Datenquelle-Hinweis",
-      "category": "beschreibung",
-      "hilfe": "Herkunft, Erhebungsmethode und Limitierungen (HTML/Markdown). Leer = ausgeblendet.",
-      "format": {
-        "typ": "markdown"
-      },
-      "default": "Die Terminkalender-App lädt Kalenderressourcen aus dem konfigurierten Datensatz und zeigt Termine in einer Kalenderansicht. Kurzfristige Änderungen hängen von der Aktualisierung der Quelle ab und sollten bei wichtigen Terminen zusätzlich geprüft werden.",
-      "erforderlich": "nein"
-    },
-    "brandingCSS": {
-      "label": "Zusätzliches Branding-CSS",
-      "category": "sonstiges",
-      "hilfe": "Optionaler CSS-Code für die konkrete App-Instanz.",
-      "default": "",
-      "format": {
-        "typ": "string",
-        "laenge": 10000
-      },
-      "erforderlich": "nein"
-    },
-    "brandingCSSFile": {
-      "label": "Branding-CSS-Datei",
-      "category": "sonstiges",
-      "hilfe": "Optionale URL zu einer zusätzlichen CSS-Datei für die konkrete App-Instanz.",
-      "default": "",
-      "format": {
-        "typ": "url",
-        "laenge": 500
-      },
-      "erforderlich": "nein"
+    "daten": {
+        "beschreibung": "Die Terminkalender-App lädt Terminressourcen aus einem CKAN-Datensatz über die package_show-JSON-API und verarbeitet enthaltene ICS-Kalenderdateien.",
+        "schema": "assets/schema.json",
+        "beispiel": "",
+        "beispiel-url": ""
     }
-  },
-  "daten": {
-    "beschreibung": "Die Terminkalender-App lädt Terminressourcen aus einem CKAN-Datensatz über die package_show-JSON-API und verarbeitet enthaltene ICS-Kalenderdateien.",
-    "schema": "assets/schema.json",
-    "beispiel": "",
-    "beispiel-url": ""
-  }
 }
