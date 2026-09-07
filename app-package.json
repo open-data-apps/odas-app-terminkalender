@@ -3,7 +3,7 @@
   "app-entwickler-name": "ondics-gmbh",
   "name-in-url": "Terminkalender",
   "name": "Terminkalender",
-  "app-version": "1.29.0",
+  "app-version": "1.29.1",
   "app-package-version": "2",
   "odas-app-icon": "assets/odas-app-icon.svg",
   "app-icon": "assets/odas-app-icon.svg",
@@ -327,7 +327,7 @@
   "daten": {
     "beschreibung": "Die Terminkalender-App lädt Terminressourcen aus einem CKAN-Datensatz über die package_show-JSON-API und verarbeitet enthaltene ICS-Kalenderdateien.",
     "schema": "assets/schema.json",
-    "beispiel": "",
-    "beispiel-url": ""
+    "beispiel": "CKAN-package_show-Antwort mit result.resources[] (ICS-Kalender) zur Ressourcenauswahl (JSON); Termine stammen aus der gewählten ICS-Datei (VEVENT: uid/start/end/title/description/location/category).",
+    "beispiel-url": "https://open-data-musterstadt.ckan.de/api/3/action/package_show?id=termine"
   }
 }
