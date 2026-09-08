@@ -472,7 +472,25 @@ function isLeerErgebnis(json) {
 function loadAvailableCalendars(state, configData, root) {
   const quelle = getOdasApiUrl(configData, "termine");
   if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
-    setTkStatus(state, "info", "Es ist keine Datenquelle konfiguriert.");
+    renderOdasFehler(root, new Error("Keine Datenquelle konfiguriert."), {
+      url: quelle,
+      label: "Termine-API",
+      typLabel: "Datensatz-API",
+      erwarteterTyp: "ckan-ps",
+    });
+    return;
+  }
+  // Variante A (F-92): Typprüfung vor dem ersten Fetch. Die .ics-Ressourcen,
+  // die aus dieser package_show-Antwort abgeleitet werden, sind Laufzeit-
+  // Downloads und werden bewusst nicht typgeprüft.
+  const tkTypWarn = validateUrlTypErwartung(quelle, "ckan-ps");
+  if (tkTypWarn) {
+    renderOdasFehler(root, new Error(tkTypWarn), {
+      url: quelle,
+      label: "Termine-API",
+      typLabel: "Datensatz-API",
+      erwarteterTyp: "ckan-ps",
+    });
     return;
   }
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
@@ -529,12 +547,12 @@ function loadAvailableCalendars(state, configData, root) {
     })
     .catch((err) => {
       console.error("Fehler beim Laden der Kalenderdaten:", err);
-      setTkStatus(
-        state,
-        "danger",
-        "Die Kalenderdaten konnten nicht geladen werden: " +
-          escapeHtml(err.message),
-      );
+      renderOdasFehler(root, err, {
+        url: quelle,
+        label: "Termine-API",
+        typLabel: "Datensatz-API",
+        erwarteterTyp: "ckan-ps",
+      });
     });
 }
 
@@ -651,11 +669,10 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       // Auch eine frisch angelegte, fehlgeschlagene Instanz raeumen, damit
       // kein halb gerendertes Kalender-DOM zurueckbleibt.
       destroyCalendarInstance(calendarElement);
-      setTkStatus(
-        state,
-        "danger",
-        "Der Kalender konnte nicht geladen werden: " + escapeHtml(err.message),
-      );
+      renderOdasFehler(root, err, {
+        url: calendarUrl,
+        label: "Kalender (Ressource)",
+      });
     });
 }
 
