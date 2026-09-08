@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.29.1 - 2026-09-07
+## 1.29.3 - 2026-09-08
 - **FIX:** F-92-Nachbesserung: top-level `escapeHtml` für `renderOdasFehler` bzw. Fehlerrender ins Status-Element statt Root (Layout-Scaffold bleibt erhalten, Regressionen check-two-instance-runtime/check-three-states grün) (1.29.2 -> 1.29.3).
+
+## 1.29.2 - 2026-09-08
 - **FIX:** Variante-A-Verdrahtung (F-92): Typprüfung (ckan-ps) der Termine-Quelle vor dem ersten Fetch; Quellen- und Ladefehler über `renderOdasFehler`. Laufzeit-.ics-Ressourcen bewusst nicht typgeprüft (1.29.1 -> 1.29.2).
+
+## 1.29.1 - 2026-09-07
 - **FIX:** Frictionless-Härtung: `daten.beispiel`/`beispiel-url` befüllt (Schema beschreibt belegt die geparsten VEVENT-Termine). package_show-Default bleibt (4B-Ausnahme, Rot-Beleg im REPORT).
 
 ## 1.29.0 - 2026-08-25
