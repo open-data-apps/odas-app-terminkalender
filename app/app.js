@@ -472,7 +472,7 @@ function isLeerErgebnis(json) {
 function loadAvailableCalendars(state, configData, root) {
   const quelle = getOdasApiUrl(configData, "termine");
   if (!quelle || /^\{\{.*\}\}$/.test(quelle) || /^<.*>$/.test(quelle)) {
-    renderOdasFehler(root, new Error("Keine Datenquelle konfiguriert."), {
+    renderOdasFehler(root.querySelector(`#tk-status-${state.uid}`), new Error("Keine Datenquelle konfiguriert."), {
       url: quelle,
       label: "Termine-API",
       typLabel: "Datensatz-API",
@@ -485,7 +485,7 @@ function loadAvailableCalendars(state, configData, root) {
   // Downloads und werden bewusst nicht typgeprüft.
   const tkTypWarn = validateUrlTypErwartung(quelle, "ckan-ps");
   if (tkTypWarn) {
-    renderOdasFehler(root, new Error(tkTypWarn), {
+    renderOdasFehler(root.querySelector(`#tk-status-${state.uid}`), new Error(tkTypWarn), {
       url: quelle,
       label: "Termine-API",
       typLabel: "Datensatz-API",
@@ -547,7 +547,7 @@ function loadAvailableCalendars(state, configData, root) {
     })
     .catch((err) => {
       console.error("Fehler beim Laden der Kalenderdaten:", err);
-      renderOdasFehler(root, err, {
+      renderOdasFehler(root.querySelector(`#tk-status-${state.uid}`), err, {
         url: quelle,
         label: "Termine-API",
         typLabel: "Datensatz-API",
