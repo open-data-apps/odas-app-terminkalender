@@ -13,6 +13,8 @@ Die App ist eine "ODAP App V1".
 - Suchfunktion
 - Datenfrische-Indikator (CKAN metadata_modified)
 - Weiterführende Links (konfigurierbar)
+- Methodik-/Datenquellen-Box und weiterführende Links erscheinen auch dann, wenn der Datensatz keine ICS-Ressource enthält
+- Ein Fehler beim Laden eines Kalenders betrifft nur die Anzeige — die Kalenderauswahl bleibt nutzbar
 
 ## Entwicklung
 

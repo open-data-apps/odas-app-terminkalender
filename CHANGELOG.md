@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.29.4 - 2026-09-10
+- **FIX (TK-B1):** `tkCleanups.set(...)` ohne Vorgänger-Cleanup — bei Same-Page-Re-Render blieb die alte calendarJs-Instanz samt dokumentweiten Listenern am Leben. Gleicher Befund wie im Müllkalender (MK-B1).
+- **FIX (TK-B2):** Ein Fehler beim ICS-Laden rief `renderOdasFehler(root, …)` und löschte damit Kalenderauswahl und Schale-4-Bereiche; ein Wechsel auf einen anderen Kalender war unmöglich. Der Fehler geht jetzt ins Status-Element (wie alle anderen Pfade seit 1.29.3).
+- **FIX (TK-B3):** `calendarAssetsPromise` blieb nach einem Fehlschlag abgelehnt und vergiftete damit die ganze Sitzung (Muster MK-B2). Reset über `resetCalendarAssetsCache()`.
+- **FIX (TK-B4):** Metadaten- und ICS-Abruf sind per `AbortController` abbrechbar und werden im Teardown abgebrochen; `fetchOdasResource`/`fetchOdasJson` reichen `signal` durch und werfen `AbortError` unverpackt.
+- **FIX (TK-B5):** Ressourcen ohne `url` werden nicht mehr in die Kalenderauswahl aufgenommen.
+- **FIX (TK-B6):** Methodik- und „Weitere Informationen"-Bereiche erscheinen jetzt auch, wenn der Datensatz keine ICS-Ressource enthält (vorher nur im Kalender-Zweig gerendert).
+- **TECH (TK-B7):** `isLeerErgebnis` entfernt (`extractPathFromUrl`/`fetchOdasJson` bleiben Verträge).
+
 ## 1.29.3 - 2026-09-08
 - **FIX:** F-92-Nachbesserung: top-level `escapeHtml` für `renderOdasFehler` bzw. Fehlerrender ins Status-Element statt Root (Layout-Scaffold bleibt erhalten, Regressionen check-two-instance-runtime/check-three-states grün) (1.29.2 -> 1.29.3).
 

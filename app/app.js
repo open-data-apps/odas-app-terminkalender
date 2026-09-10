@@ -89,6 +89,12 @@ function loadScriptOnce(id, src, globalName) {
   });
 }
 
+// TK-B3: Cache nach einem Fehlschlag freigeben (Muster wie im Muellkalender).
+function resetCalendarAssetsCache() {
+  if (!calendarAssetsPromise) return;
+  calendarAssetsPromise = null;
+}
+
 function ensureCalendarAssets() {
   if (calendarAssetsPromise) return calendarAssetsPromise;
 
@@ -104,9 +110,14 @@ function ensureCalendarAssets() {
       appAssetUrl("dist/translations/calendar.translations.de.js"),
       "__TRANSLATION_OPTIONS",
     ),
-  ]).then(() =>
-    loadScriptOnce("tk-calendar-js", appAssetUrl("dist/calendar.min.js"), "calendarJs"),
-  );
+  ])
+    .then(() =>
+      loadScriptOnce("tk-calendar-js", appAssetUrl("dist/calendar.min.js"), "calendarJs"),
+    )
+    .catch((err) => {
+      resetCalendarAssetsCache();
+      throw err;
+    });
 
   return calendarAssetsPromise;
 }
@@ -159,8 +170,19 @@ function app(configData, enclosingHtmlDivElement) {
     disposed: false,
     calendarData: {},
   };
+  // TK-B4: Controller je Instanz fuer abbrechbare Abrufe.
+  state.controller = new AbortController();
+  // TK-B1: Vorgaenger-Instanz desselben Containers zuerst abraeumen — sonst
+  // bleibt ihre calendarJs-Instanz (dokumentweite Listener) am Leben.
+  const tkVorherigerCleanup = tkCleanups.get(enclosingHtmlDivElement);
+  if (tkVorherigerCleanup) {
+    try {
+      tkVorherigerCleanup();
+    } catch (_e) {}
+  }
   tkCleanups.set(enclosingHtmlDivElement, () => {
     state.disposed = true;
+    state.controller.abort();
     const calendarElement = enclosingHtmlDivElement.querySelector("#tk-calendar-" + state.uid);
     destroyCalendarInstance(calendarElement);
   });
@@ -269,18 +291,21 @@ async function fetchViaOdasProxy(targetUrl, options = {}) {
   return proxyData.content;
 }
 
-async function fetchOdasResource(targetUrl, configdata = {}) {
+async function fetchOdasResource(targetUrl, configdata = {}, options = {}) {
   if (isOdasProxyEnabled(configdata)) {
-    return fetchViaOdasProxy(targetUrl);
+    return fetchViaOdasProxy(targetUrl, options);
   }
 
   try {
-    const response = await fetch(targetUrl);
+    const response = await fetch(targetUrl, {
+      signal: options && options.signal ? options.signal : undefined,
+    });
     if (!response.ok) {
       throw new Error(`HTTP ${response.status}`);
     }
     return response.text();
   } catch (error) {
+    if (error && error.name === "AbortError") throw error;
     throw new Error(
       `Direkter Datenabruf fehlgeschlagen (${error.message}). Bitte prüfen Sie die Daten-URL und die CORS-Freigabe der Datenquelle.`,
     );
@@ -298,8 +323,8 @@ function getOdasApiUrl(configdata, name) {
   return String((treffer && treffer.url) || "").trim();
 }
 
-async function fetchOdasJson(targetUrl, configdata = {}) {
-  const rawContent = await fetchOdasResource(targetUrl, configdata);
+async function fetchOdasJson(targetUrl, configdata = {}, options = {}) {
+  const rawContent = await fetchOdasResource(targetUrl, configdata, options);
   try {
     return JSON.parse(rawContent);
   } catch (_error) {
@@ -458,15 +483,6 @@ function renderOdasFehler(container, error, kontext = {}) {
   container.innerHTML = `<div class="alert ${alertClass}" role="alert"><strong>${escapeHtml(titel)}</strong><p class="mb-1">${escapeHtml(info.hinweis)}</p>${urlZeile}<details class="small"><summary>Details</summary><code>${escapeHtml(info.detail || String(error))}</code></details></div>`;
 }
 
-function isLeerErgebnis(json) {
-  if (!json) return true;
-  if (Array.isArray(json) && json.length === 0) return true;
-  if (Array.isArray(json.records) && json.records.length === 0) return true;
-  if (Array.isArray(json.results) && json.results.length === 0) return true;
-  if (json.result && Array.isArray(json.result.records) && json.result.records.length === 0) return true;
-  return false;
-}
-
 
 // Lade Kalender von der API über Proxy
 function loadAvailableCalendars(state, configData, root) {
@@ -494,8 +510,11 @@ function loadAvailableCalendars(state, configData, root) {
     return;
   }
   // Daten laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
-  fetchOdasJson(getOdasApiUrl(configData, "termine"), configData)
+  fetchOdasJson(getOdasApiUrl(configData, "termine"), configData, {
+    signal: state.controller.signal,
+  })
     .then((data) => {
+      if (state.disposed) return;
       if (data.success && data.result.resources) {
         const stand = extractDatenStand(data);
         if (stand) {
@@ -506,8 +525,11 @@ function loadAvailableCalendars(state, configData, root) {
         }
 
         const resources = data.result.resources;
+        // TK-B5: Ressourcen ohne URL erzeugen sonst einen Dropdown-Eintrag mit
+        // value="undefined", der beim Auswaehlen zwangslaeufig scheitert.
         state.calendarData = resources.filter(
           (resource) =>
+            String((resource && resource.url) || "").trim() !== "" &&
             String((resource && resource.format) || "")
               .toLowerCase()
               .includes("ics"),
@@ -516,26 +538,28 @@ function loadAvailableCalendars(state, configData, root) {
         if (state.calendarData.length > 0) {
           createCalendarDropdown(state, state.calendarData, configData, root);
           loadCalendar(state, state.calendarData[0].url, configData, root);
-
-          const methodikHTML = renderMethodikbox(configData, stand);
-          if (methodikHTML) {
-            const methodikEl = document.createElement("div");
-            methodikEl.innerHTML = methodikHTML;
-            root.appendChild(methodikEl);
-          }
-
-          const weitereHTML = renderWeitereInfos(configData);
-          if (weitereHTML) {
-            const weitereEl = document.createElement("div");
-            weitereEl.innerHTML = weitereHTML;
-            root.appendChild(weitereEl);
-          }
         } else {
           setTkStatus(
             state,
             "info",
             "Keine Kalender im passenden Format (ICS) gefunden.",
           );
+        }
+
+        // TK-B6: Die Schale-4-Bereiche gehoeren zur Seite, nicht zum Kalender —
+        // vorher fehlten sie, wenn der Datensatz keine ICS-Ressource hatte.
+        const methodikHTML = renderMethodikbox(configData, stand);
+        if (methodikHTML) {
+          const methodikEl = document.createElement("div");
+          methodikEl.innerHTML = methodikHTML;
+          root.appendChild(methodikEl);
+        }
+
+        const weitereHTML = renderWeitereInfos(configData);
+        if (weitereHTML) {
+          const weitereEl = document.createElement("div");
+          weitereEl.innerHTML = weitereHTML;
+          root.appendChild(weitereEl);
         }
       } else {
         setTkStatus(
@@ -546,6 +570,8 @@ function loadAvailableCalendars(state, configData, root) {
       }
     })
     .catch((err) => {
+      if (err && err.name === "AbortError") return;
+      if (state.disposed) return;
       console.error("Fehler beim Laden der Kalenderdaten:", err);
       renderOdasFehler(root.querySelector(`#tk-status-${state.uid}`), err, {
         url: quelle,
@@ -622,7 +648,9 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
   state.calendarLadeToken = (state.calendarLadeToken || 0) + 1;
   const ladeToken = state.calendarLadeToken;
   // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
-  fetchOdasResource(calendarUrl, configData)
+  fetchOdasResource(calendarUrl, configData, {
+    signal: state.controller.signal,
+  })
     .then(async (icsData) => {
       await ensureCalendarAssets();
       // Veralteter Erfolg / Disposed: weder Kalenderinstanz/DOM noch Status des
@@ -665,11 +693,15 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       if (state.disposed || state.calendarLadeToken !== ladeToken) {
         return;
       }
+      if (err && err.name === "AbortError") return;
       console.error("Fehler beim Laden der Kalenderdaten:", err);
       // Auch eine frisch angelegte, fehlgeschlagene Instanz raeumen, damit
       // kein halb gerendertes Kalender-DOM zurueckbleibt.
       destroyCalendarInstance(calendarElement);
-      renderOdasFehler(root, err, {
+      // TK-B2: Fehler ins Status-Element statt nach `root` — sonst verschwinden
+      // Kalenderauswahl und Schale-4-Bereiche und ein Wechsel auf einen anderen
+      // Kalender ist nicht mehr moeglich.
+      renderOdasFehler(root.querySelector(`#tk-status-${state.uid}`), err, {
         url: calendarUrl,
         label: "Kalender (Ressource)",
       });
