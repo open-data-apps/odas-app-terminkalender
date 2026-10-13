@@ -65,3 +65,10 @@
 .tk-methodik-content a {
   overflow-wrap: anywhere;
 }
+
+/* F-159: ICS-Export von Calendar.js 2.12.1 ist fehlerhaft (Zeitverschiebung, ungültige
+   Ganztage); die App bietet stattdessen die Original-Kalenderdatei an. Die iCAL-Option ist
+   im Exportdialog die erste Auswahl der zweiten Spalte (CSV ist vorausgewählt). */
+.calendar-dialog.export-events .split.options > .radio-buttons-container:nth-child(2) > .radio-button-container:first-child {
+  display: none;
+}

@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.29.9 - 2026-10-13
+- FIX: F-159: Der fehlerhafte ICS-Export der Kalenderbibliothek (verschobene Zeiten, ungültige Ganztage) ist im Exportdialog ausgeblendet; „Kalender herunterladen (ICS)“ liefert die geladene Original-Kalenderdatei inkl. Wiederholungen und Zeitzonen. Übrige Exportformate unverändert.
+
 ## 1.29.8 - 2026-10-08
 - DOC: F-154: Schema als Dokumentation der ICS-Quellfelder kennzeichnen; nicht übernommene Orts-/Kategorienangaben ausdrücklich abgrenzen, kein neuer Kategorienfilter.
 - FIX: F-131: Leseschutz manualEditingEnabled im zweiten Calendar.js-Argument mit deutscher Übersetzung kombinieren. Unwirksame, nicht unterstützte Optionen aus dem dritten Suchoptionen-Argument entfernt.

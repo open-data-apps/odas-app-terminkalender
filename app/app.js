@@ -203,9 +203,42 @@ function app(configData, enclosingHtmlDivElement) {
     </div>
     <div id="tk-status-${tkUid}">
     </div>
+    <div id="tk-ics-download-wrap-${tkUid}"></div>
     <div id="tk-calendar-${tkUid}">
     </div>`;
+  createIcsDownloadButton(state, enclosingHtmlDivElement);
   loadAvailableCalendars(state, configData, enclosingHtmlDivElement);
+}
+
+// F-159: Der ICS-Export von Calendar.js 2.12.1 verschiebt Zeiten und schreibt ungültige
+// Ganztage. Stattdessen wird die geladene Original-Kalenderdatei angeboten (inkl.
+// Wiederholungen/Zeitzonen); die iCAL-Option im Bibliotheksdialog blendet app.css aus.
+function createIcsDownloadButton(state, root) {
+  const wrap = root.querySelector("#tk-ics-download-wrap-" + state.uid);
+  const button = document.createElement("button");
+  button.type = "button";
+  button.id = "tk-ics-download-" + state.uid;
+  button.className = "btn btn-outline-dark btn-sm mb-2";
+  button.textContent = "Kalender herunterladen (ICS)";
+  button.disabled = true;
+  button.addEventListener("click", () => {
+    if (!state.icsOriginal) return;
+    const url = URL.createObjectURL(new Blob([state.icsOriginal], { type: "text/calendar;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "terminkalender.ics";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  });
+  wrap.appendChild(button);
+}
+
+function setIcsDownload(state, root, icsText) {
+  state.icsOriginal = icsText;
+  const button = root.querySelector("#tk-ics-download-" + state.uid);
+  if (button) button.disabled = !icsText;
 }
 
 // ── SICHTBARE ZUSTÄNDE ───────────────────────────────────────────────────────
@@ -656,6 +689,7 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
   // hat) wird dadurch verworfen, statt die neuere Instanz zu zerstoeren.
   state.calendarLadeToken = (state.calendarLadeToken || 0) + 1;
   const ladeToken = state.calendarLadeToken;
+  setIcsDownload(state, root, null);
   // ICS laden: direkt oder ueber den ODAS-Proxy (proxyAktiv)
   fetchOdasResource(calendarUrl, configData, {
     signal: state.controller.signal,
@@ -669,6 +703,7 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
       }
 
       const events = parseIcsToEvents(icsData);
+      setIcsDownload(state, root, icsData);
       if (events.hinweis) {
         setTkStatus(state, "info", events.hinweis);
       } else if (events.length === 0) {
