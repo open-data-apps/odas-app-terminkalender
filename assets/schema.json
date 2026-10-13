@@ -1,5 +1,6 @@
 {
   "$schema": "https://frictionlessdata.io/schemas/table-schema.json",
+  "description": "Tabellarische Dokumentation von Feldern der ICS-Quelle, nicht das interne Calendar.js-Objekt. Die Runtime expandiert Termine in from/to/title/description/isAllDay; Ganztage und Serien werden nach ICS-Semantik verarbeitet. Nicht ausgewertete Quellfelder sind unten ausdrücklich gekennzeichnet.",
   "fields": [
     {
       "name": "uid",
@@ -52,7 +53,7 @@
       "name": "location",
       "type": "string",
       "title": "Ort",
-      "description": "Veranstaltungsort des Termins",
+      "description": "Veranstaltungsort in der ICS-Quelle; wird von der App derzeit nicht in die Kalenderdarstellung übernommen",
       "constraints": {
         "required": false
       }
@@ -61,7 +62,7 @@
       "name": "category",
       "type": "string",
       "title": "Kategorie",
-      "description": "Optionale Kategorisierung des Termins",
+      "description": "Optionale Kategorie in der ICS-Quelle; wird von der App nicht ausgewertet und bietet keinen Kategorienfilter",
       "constraints": {
         "required": false
       }

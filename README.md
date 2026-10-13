@@ -16,6 +16,14 @@ Die App ist eine "ODAP App V1".
 - Methodik-/Datenquellen-Box und weiterführende Links erscheinen auch dann, wenn der Datensatz keine ICS-Ressource enthält
 - Ein Fehler beim Laden eines Kalenders betrifft nur die Anzeige — die Kalenderauswahl bleibt nutzbar
 
+## Datenvertrag
+
+`assets/schema.json` dokumentiert Quellfelder der ICS-Datei in Tabellenform,
+nicht das interne Calendar.js-Objekt. Die App zeigt Titel, Beschreibung,
+Zeitpunkt und Ganztagsstatus; Wiederholungen werden für das im Kalender genannte
+Zeitfenster expandiert. `LOCATION` und `CATEGORIES` werden derzeit nicht in die
+Kalenderdarstellung übernommen. Ein Kategorienfilter wird nicht angeboten.
+
 ## Entwicklung
 
 ### Aufbau der App

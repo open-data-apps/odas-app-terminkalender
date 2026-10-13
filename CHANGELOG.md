@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.29.8 - 2026-10-08
+- DOC: F-154: Schema als Dokumentation der ICS-Quellfelder kennzeichnen; nicht übernommene Orts-/Kategorienangaben ausdrücklich abgrenzen, kein neuer Kategorienfilter.
+- FIX: F-131: Leseschutz manualEditingEnabled im zweiten Calendar.js-Argument mit deutscher Übersetzung kombinieren. Unwirksame, nicht unterstützte Optionen aus dem dritten Suchoptionen-Argument entfernt.
+
+## 1.29.7 - 2026-10-08
+- FIX: F-130: Ganztägige ICS-Termine mit exklusivem Ende korrekt darstellen; VTIMEZONE kalenderlokal berücksichtigen; Serien einschließlich EXDATE/RECURRENCE-ID expandieren.
+- FIX: F-130 (Nachbesserung): Mehrtägige Ganztagstermine bleiben bis zum letzten belegten Tag sichtbar (Calendar.js kürzt Ganztage sonst auf den Starttag); doppelte VTIMEZONE-Definitionen bleiben kalenderlokal. Abgesagte Termine (STATUS:CANCELLED) werden – auch als Einzeltermin – nicht angezeigt.
+- FIX: Wiederholungen werden für Vorjahr, laufendes Jahr und Folgejahr angezeigt; der Zeitraum steht sichtbar am Kalender. Übermäßige Expansion wird als Fehler statt als vollständiger Kalender behandelt.
+
+## 1.29.6 - 2026-10-02
+- ENH: Verwendete ODAS-Dienste in `odas-services` deklariert.
+
+## 1.29.5 - 2026-09-29
+
+- **FIX:** Audit F-129: Fehlgeschlagene Vendor-Skript-/Style-Tags blieben im Dokument stehen; jeder Wiederholungsversuch wartete auf das tote Tag. Tags werden bei Fehler entfernt, sodass ein neuer Versuch ein neues Tag anlegt.
+
 ## 1.29.4 - 2026-09-10
 - **FIX (TK-B1):** `tkCleanups.set(...)` ohne Vorgänger-Cleanup — bei Same-Page-Re-Render blieb die alte calendarJs-Instanz samt dokumentweiten Listenern am Leben. Gleicher Befund wie im Müllkalender (MK-B1).
 - **FIX (TK-B2):** Ein Fehler beim ICS-Laden rief `renderOdasFehler(root, …)` und löschte damit Kalenderauswahl und Schale-4-Bereiche; ein Wechsel auf einen anderen Kalender war unmöglich. Der Fehler geht jetzt ins Status-Element (wie alle anderen Pfade seit 1.29.3).
