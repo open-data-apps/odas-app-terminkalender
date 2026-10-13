@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.29.10 - 2026-10-13
+- FIX: F-130 (Nachbesserung): Wiederholungslimit gilt je Serie (vor und im Darstellungsfenster getrennt); sehr dichte Serien werden gekürzt und benannt statt den ganzen Kalender scheitern zu lassen. Bei extremen Kalendern erscheint die konkrete Meldung.
+
 ## 1.29.9 - 2026-10-13
 - FIX: F-159: Der fehlerhafte ICS-Export der Kalenderbibliothek (verschobene Zeiten, ungültige Ganztage) ist im Exportdialog ausgeblendet; „Kalender herunterladen (ICS)“ liefert die geladene Original-Kalenderdatei inkl. Wiederholungen und Zeitzonen. Übrige Exportformate unverändert.
 

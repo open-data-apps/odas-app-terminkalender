@@ -58,3 +58,12 @@ test('F-130 doppelte VTIMEZONE bleibt kalenderlokal', () => {
   app.parseIcsToEvents(wrap(timezone + '\r\n' + timezone + '\r\n' + event(`DTSTART;TZID=Audit/Doppelt:${year}0922T093000\r\nDTEND;TZID=Audit/Doppelt:${year}0922T103000`)));
   assert.equal(lib.TimezoneService.get('Audit/Doppelt'), before);
 });
+test('Review-Nachtrag: tägliche Serie seit 1970 wird im Fenster angezeigt statt den Kalender abzubrechen', () => {
+  const entries = app.parseIcsToEvents(wrap(event('DTSTART:19700101T100000Z\r\nDTEND:19700101T110000Z\r\nRRULE:FREQ=DAILY')));
+  assert.ok(entries && entries.length > 700 && entries.length < 1100, String(entries && entries.length));
+});
+test('Review-Nachtrag: übergroße Serie wird gekürzt und benannt', () => {
+  const entries = app.parseIcsToEvents(wrap(event(`DTSTART:${year - 1}0101T000000Z\r\nDTEND:${year - 1}0101T003000Z\r\nRRULE:FREQ=HOURLY`)));
+  assert.ok(entries && entries.length <= 5000);
+  assert.match(entries.hinweis || '', /nicht alle/);
+});
