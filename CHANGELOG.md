@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.29.14 - 2026-10-15
+- FIX: Kopfzeile bei 360 px ohne Überlauf (Template): Logo- und Burger-Spalte passen sich der Breite an, das Menü-Symbol ragt nicht mehr über den rechten Rand. Keine Änderung an App-Code oder Konfiguration.
+
 ## 1.29.13 - 2026-10-15
 - FIX: Kalender-Überschriften (Titelleiste, Termine in „Alle Veranstaltungen“, Tages-/Wochenansicht) erscheinen wieder in der hellen Standardschrift statt in übergroßer dunkler Schrift; Termine in gelber, cyanfarbener und grüner Farbe haben dunkle Schrift. Die englischen Standard-Feiertage der Kalenderbibliothek (z. B. „Halloween“) werden nicht mehr angezeigt. Liegt im aktuellen Monat kein Termin, öffnet der Kalender beim nächsten anstehenden (sonst letzten) Termin. Überzähliges schließendes `</div>` im Seitenaufbau entfernt. Die Beschreibung nennt Wiederholungsregeln, Ausnahmen und abgesagte Termine sowie den ICS-Download der geladenen Original-Kalenderdatei korrekt.
 
