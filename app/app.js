@@ -891,7 +891,7 @@ function parseIcsToEvents(icsData) {
       title: title,
       description: event.description || "Keine Beschreibung verfügbar",
       color: color, // Farbe setzen
-      colorText: ["#33FF57", "#33FFF5", "#FFC733"].includes(color) ? "#212529" : undefined,
+      colorText: ["#FF5733", "#33FF57", "#FF33A1", "#33FFF5", "#FFC733"].includes(color) ? "#212529" : undefined,
     });
   });
   return events;

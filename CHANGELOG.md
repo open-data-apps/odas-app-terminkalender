@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.29.15 - 2026-10-15
+- FIX: Termine in den Farben Orange-Rot (#FF5733) und Pink (#FF33A1) zeigen dunkle statt weißer Schrift, damit der Kontrast mindestens 4,5:1 erreicht.
+
 ## 1.29.14 - 2026-10-15
 - FIX: Kopfzeile bei 360 px ohne Überlauf (Template): Logo- und Burger-Spalte passen sich der Breite an, das Menü-Symbol ragt nicht mehr über den rechten Rand. Keine Änderung an App-Code oder Konfiguration.
 
