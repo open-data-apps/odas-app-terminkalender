@@ -199,7 +199,6 @@ function app(configData, enclosingHtmlDivElement) {
   enclosingHtmlDivElement.innerHTML = `<div class="row">
       <div class="col-12" id="tk-calendarOptions-${tkUid}">
       </div>
-      </div>
     </div>
     <div id="tk-status-${tkUid}">
     </div>
@@ -732,12 +731,25 @@ function loadCalendar(state, calendarUrl, configData = {}, root) {
           ...(window.__TRANSLATION_OPTIONS || {}),
           // F-131: Allgemeine Optionen gehören bei Calendar.js 2.12.1 in Argument 2.
           manualEditingEnabled: false,
+          holidays: [], // keine englischen Standard-Feiertage von Calendar.js
         }
       );
       // Instanz registrieren, bevor setEvents laeuft: schlaegt der weitere
       // Aufbau fehl, kann der catch sie zerstoeren statt sie zu verlieren.
       calendarElement.__calendarInstance = calendarInstance;
       calendarInstance.setEvents(events);
+      // Der Kalender öffnet im aktuellen Monat; liegen dort keine Termine, zum nächsten
+      // anstehenden (sonst letzten) Termin springen.
+      if (events.length) {
+        const jetzt = new Date();
+        const monatsAnfang = new Date(jetzt.getFullYear(), jetzt.getMonth(), 1);
+        const monatsEnde = new Date(jetzt.getFullYear(), jetzt.getMonth() + 1, 1);
+        if (!events.some((e) => e.from < monatsEnde && (e.to || e.from) >= monatsAnfang)) {
+          const heute = new Date(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate());
+          const starts = events.map((e) => e.from).sort((a, b) => a - b);
+          calendarInstance.setCurrentDisplayDate(starts.find((d) => d >= heute) || starts[starts.length - 1]);
+        }
+      }
     })
     .catch((err) => {
       // Veralteter Fehler / Disposed: Instanz/DOM/Status des neueren Ladevorgangs
@@ -879,6 +891,7 @@ function parseIcsToEvents(icsData) {
       title: title,
       description: event.description || "Keine Beschreibung verfügbar",
       color: color, // Farbe setzen
+      colorText: ["#33FF57", "#33FFF5", "#FFC733"].includes(color) ? "#212529" : undefined,
     });
   });
   return events;

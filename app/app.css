@@ -72,3 +72,10 @@
 .calendar-dialog.export-events .split.options > .radio-buttons-container:nth-child(2) > .radio-button-container:first-child {
   display: none;
 }
+
+/* app-base.css .title (Seitenkopf) greift sonst auch auf Calendar.js-Titel */
+div.calendar div.title,
+div.calendar-tooltip-event div.title {
+  color: inherit;
+  font-size: inherit;
+}
