@@ -2,6 +2,7 @@
 
 ## 1.29.16 - 2026-11-03
 - DOCS: MIT-Lizenz ergänzt: `LICENSE` liegt im Repository und im Lieferpaket (`make zip`), das README hat einen Abschnitt „Lizenz“. Keine Änderung an App-Code oder Konfiguration.
+- DOCS: Alte Store-Screenshots unter `docs/screenshots/archive/2026-10-13/` entfernt; sie bleiben über den Git-Tag `archive/screenshots-2026-10-13` abrufbar.
 
 ## 1.29.15 - 2026-10-15
 - FIX: Termine in den Farben Orange-Rot (#FF5733) und Pink (#FF33A1) zeigen dunkle statt weißer Schrift, damit der Kontrast mindestens 4,5:1 erreicht.
